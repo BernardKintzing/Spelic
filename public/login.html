@@ -1,11 +1,61 @@
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Spelic | Log In</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-	</head>
+
+<head>
+    <title>Spelic | Log In</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+
+    <section id="main" class="wrapper alt">
+        <div class="inner">
+            <div class="form-wrapper">
+                <h1>Log In</h1>
+                <form method="post" action="#">
+                    <div class="row uniform">
+                        <div class="12u 12u$(xsmall)">
+                            <input type="text" name="email" id="email" value="" placeholder="Name" />
+                        </div>
+                        <div class="12u$ 12u$(xsmall)">
+                            <input type="email" name="email" id="email" value="" placeholder="Email" />
+                        </div>
+                        <div class="12u$ 12u$(xsmall)">
+                            <input type="password" name="password" id="password" value="" placeholder="Password" />
+                        </div>
+                        <div class="12u$ 12u$(xsmall)">
+                            <input type="password" name="confim-password" id="confirm-password" value="" placeholder="Confirm Password" />
+                        </div>
+
+
+                        <div class="12u$">
+                            <ul class="actions">
+                                <li><input type="submit" value="Log In" class="special" /></li>
+                            </ul>
+                        </div>
+                        <div class="12u$">
+                            <a>Create an Account</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script src="/__/firebase/7.8.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+    <script src="/__/firebase/init.js"></script>
+
+</body>
 
 <!-- <body>
     <h1>Log In</h1>
@@ -20,7 +70,7 @@
             <button id="sign-in">Sign In</button>
         </div>
     </form> -->
-    <!-- <h1>Sign Up</h1>
+<!-- <h1>Sign Up</h1>
     <form>
         <div>
             <input id="email-signup" type="text" placeholder="Email...">
@@ -37,60 +87,53 @@
     </form> -->
 
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="/__/firebase/7.8.0/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use -->
-    <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
-
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-
-    <script>
-        document.querySelector('#sign-in').addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var email = document.querySelector('#email').value;
-            var password = document.querySelector('#password').value
-            firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorMessage)
-                // ...
-            });
 
 
-            firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-                    window.location.replace("/home.html");
-                } else {
-                    window.location.replace("/login.html");
-                }
-            });
-            // var credential = firebase.auth.EmailAuthProvider.credential(email, password);
-            // var auth = firebase.auth();
-            // var currentUser = auth.currentUser;
-
-            console.log(currentUser)
-
-            //TODO redirect to home
+<script>
+    document.querySelector('#sign-in').addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var email = document.querySelector('#email').value;
+        var password = document.querySelector('#password').value
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorMessage)
+            // ...
         });
 
-        document.querySelector('#sign-up').addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var email = document.querySelector('#email-signup').value;
-            var password = document.querySelector('#password-signup').value
-            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
-                // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                console.log(errorMessage)
-                // ...
-            });
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                window.location.replace("/home.html");
+            } else {
+                window.location.replace("/login.html");
+            }
         });
-    </script>
+        // var credential = firebase.auth.EmailAuthProvider.credential(email, password);
+        // var auth = firebase.auth();
+        // var currentUser = auth.currentUser;
+
+        console.log(currentUser)
+
+        //TODO redirect to home
+    });
+
+    document.querySelector('#sign-up').addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var email = document.querySelector('#email-signup').value;
+        var password = document.querySelector('#password-signup').value
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorMessage)
+            // ...
+        });
+    });
+</script>
 </body>
 
 </html>
