@@ -103,6 +103,31 @@
             // ...
         });
 
+	<script>
+		document.querySelector('#reset-password').addEventListener('click',function(e) {
+		  var auth = firebase.auth();
+          var emailAddress = user.email();
+			auth.sendPasswordResetEmail(emailAddress).then(function() {
+				// Email sent.
+			}).catch(function(error) {
+				// An error happened.
+			});
+		}
+	</script>
+
+    <script>
+        document.querySelector('#sign-in').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var email = document.querySelector('#email').value;
+            var password = document.querySelector('#password').value
+            firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorMessage)
+                // ...
+            });
 
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -115,7 +140,18 @@
         // var auth = firebase.auth();
         // var currentUser = auth.currentUser;
 
-        console.log(currentUser)
+
+
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    window.location.replace("/home.html");
+                } else {
+                    window.location.replace("/login.html");
+                }
+            });
+            // var credential = firebase.auth.EmailAuthProvider.credential(email, password);
+            // var auth = firebase.auth();
+            // var currentUser = auth.currentUser;
 
         //TODO redirect to home
     });
