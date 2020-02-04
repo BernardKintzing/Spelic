@@ -1,5 +1,6 @@
 <html>
-<body>
+
+<body onload="checkAuth()">
 
 
 
@@ -12,6 +13,18 @@
 
     <!-- Initialize Firebase -->
     <script src="/__/firebase/init.js"></script>
+
+    <script>
+        function checkAuth() {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    window.location.replace("/home.html");
+                } else {
+                    window.location.replace("/login.html");
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
