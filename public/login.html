@@ -40,8 +40,12 @@
                             <ul class="actions">
                                 <li><input id="create-account" type="submit" value="Create an Account" /></li>
                             </ul>
-                        </div>
                     </div>
+                        <div class="12u$">
+                            <ul class="actions">
+                                <li><input id="reset-password" type="submit" value="Reset Password" /></li>
+                            </ul>
+                        </div>
                 </form>
             </div>
     </section>
@@ -130,8 +134,8 @@
         // Reset Password
         document.querySelector('#reset-password').addEventListener('click', function (e) {
             var auth = firebase.auth();
-            var emailAddress = user.email();
-            auth.sendPasswordResetEmail(emailAddress).then(function () {
+            var emailAddress = document.querySelector('#email').value;
+                auth.sendPasswordResetEmail(emailAddress).then(function () {
                 // Email sent.
             }).catch(function (error) {
                 // An error happened.
