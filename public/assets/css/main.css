@@ -1416,6 +1416,12 @@
 			transition: none !important;
 		}
 
+/* Helper Classes */
+
+	.display-none {
+		display: none !important;
+	}
+
 /* Type */
 
 	html {
@@ -2002,13 +2008,11 @@
 				background-color: #3dc69e;
 			}
 
-/* Form Wrapper */
+/* Form */
 	.form-wrapper {
 		margin: 0 auto;
 		width: 30rem;
 	}
-
-/* Form */
 
 	form {
 		margin: 0 0 2.5rem 0;
