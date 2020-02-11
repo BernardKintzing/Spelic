@@ -1,12 +1,81 @@
+<!--
+Account Settings:
+    Teacher Info:
+        FName Lname
+    Change Username
+    Change Password
+-->
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Account Settings</title>
 <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 </head>
+
+
 <body>
-<h1>
-    Account settings go here.
-</h1>
+<section id="main" class="wrapper">
+    <div class="inner">
+        <div class="form-wrapper">
+            <h1>Account <Settings></Settings></h1>
+            <header class="major">
+        </header>
+
+            <div class="12u$">
+                <ul class="actions">
+                    <li><input id="reset-password" type="submit" value="Reset Password" /></li>
+                </ul>
+            </div>
+            <div class="12u$">
+                <ul class="actions">
+                    <li><input id="update-password" type="submit" value="Update Password" /></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.scrolly.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/skel.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+<script src="/__/firebase/7.8.0/firebase-app.js"></script>
+<script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+<script src="/__/firebase/init.js"></script>
+
+<script>
+var user = firebase.auth().currentUser;
+const credential = firebase.auth.EmailAuthProvider.credential(
+    user.email,
+    userProvidedPassword
+    );
+
+    // Reauthenticate User before updating password
+    user.reauthenticateWithCredential(credential).then(function() {
+      // User re-authenticated.
+    }).catch(function(error) {
+      // An error happened.
+       var errorMessage = document.querySelector('#error-message')
+       errorMessage.innerHTML = error.message
+    });
+document.querySelector('#update-password').addEventListener('click', function (e) {
+    var email = user.email;
+    // Update Password
+    user.sendPasswordResetEmail(email).then(function() {
+      // Update successful.
+    }).catch(function(error) {
+      // An error happened.
+    });
+});
+</script>
+
+
 </body>
 </html>
