@@ -200,7 +200,8 @@
                 auth.sendPasswordResetEmail(emailAddress).then(function () {
                 // Email sent.
             }).catch(function (error) {
-                // An error happened.
+                var errorMessage = document.querySelector('#error-message')
+                errorMessage.innerHTML = error.message
             });
         });
 
