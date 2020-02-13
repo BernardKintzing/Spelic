@@ -1422,6 +1422,14 @@
 		display: none !important;
 	}
 
+	.text-align-right {
+		text-align: right;
+	}
+
+	.pointer-cursor {
+		cursor: pointer;
+	}
+
 /* Type */
 
 	html {

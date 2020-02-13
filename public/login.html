@@ -13,7 +13,7 @@
     <section id="main" class="wrapper alt">
         <div class="inner">
             <div class="form-wrapper">
-                <h1>Log In</h1>
+                <h1 id="title">Log In</h1>
                 <p id="error-message"></p>
                 <form method="post" action="#">
                     <div class="row uniform">
@@ -31,19 +31,18 @@
                                 placeholder="Confirm Password" class="display-none" />
                         </div>
 
-                        <div class="12u$">
+                        <div class="6u 12u$(xsmall)">
                             <ul class="actions">
                                 <li><input id="submit" type="submit" value="Log In" class="special" /></li>
                             </ul>
                         </div>
+                        <div class="6u$ 12u$(xsmall) text-align-right">
+                            <p id="forgot-password" class="pointer-cursor">Forgot Password</p>
+                        </div>
+
                         <div class="12u$">
                             <ul class="actions">
-                                <li><input id="create-account" type="submit" value="Create an Account" /></li>
-                            </ul>
-                    </div>
-                        <div class="12u$">
-                            <ul class="actions">
-                                <li><input id="reset-password" type="submit" value="Reset Password" /></li>
+                                <p id="create-account" class="pointer-cursor">Don't have and account?</p>
                             </ul>
                         </div>
                 </form>
@@ -57,156 +56,11 @@
     <script src="assets/js/skel.min.js"></script>
     <script src="assets/js/util.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/login.js"></script>
 
     <script src="/__/firebase/7.8.0/firebase-app.js"></script>
     <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
     <script src="/__/firebase/init.js"></script>
-
-    <script>
-
-
-        var createAccount = document.querySelector('#create-account')
-        var submit = document.querySelector('#submit')
-
-        // 1: Log in
-        // 0: Sign up
-        var logIn = 1
-
-        // Log In 
-        submit.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var errorMessage = document.querySelector('#error-message')
-            var name = document.querySelector('#name')
-            var email = document.querySelector('#email')
-            var password = document.querySelector('#password')
-            var confirmPassword = document.querySelector('#confirm-password')
-
-            if (logIn) {
-                // Log user in
-
-                errorMessage.innerHTML = ""
-                var validLogIn = true
-
-                // Check for valid email
-                if (email.value.length == 0) {
-                    validLogIn = false
-                    errorMessage.innerHTML = "Email is required."
-                } else {
-                    var check = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-                    if (!check.test(email.value.toLowerCase())) {
-                        validLogIn = false
-                        errorMessage.innerHTML = "Invalid email address."
-                    }
-                }
-
-                // Check for valid password
-                if (password.value.length == 0) {
-                    validLogIn = false
-                    errorMessage.innerHTML += " Password is required."
-                }
-
-                if (validLogIn) {
-                    firebase.auth().signInWithEmailAndPassword(email.value, password.value)
-                    .then(function (result) {
-                        window.location.replace("/home.html");
-                    })
-                    .catch(function (error) {
-                        errorMessage.innerHTML = error.message
-                    });
-                }
-            } else {
-                // Create user account
-
-                errorMessage.innerHTML = ""
-                var validSignUp = true
-
-                // Check for valid name
-                if (name.value.length == 0) {
-                    validSignUp = false
-                    errorMessage.innerHTML += " Name is required."
-                }
-
-                // Check for valid email
-                if (email.value.length == 0) {
-                    validSignUp = false
-                    errorMessage.innerHTML = "Email is required."
-                } else {
-                    var check = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-                    if (!check.test(email.value.toLowerCase())) {
-                        validSignUp = false
-                        errorMessage.innerHTML = "Invalid email address."
-                    }
-                }
-
-                // Check for valid password
-                if (password.value.length == 0) {
-                    validSignUp = false
-                    errorMessage.innerHTML += " Password is required."
-                }
-
-                // Check for valid confirm password
-                if (confirmPassword.value.length == 0) {
-                    validSignUp = false
-                    errorMessage.innerHTML += " Confirm password is required."
-                }
-
-                // Check if passwords match
-                if (password.value != confirmPassword.value) {
-                    validSignUp = false
-                    errorMessage.innerHTML += " Passwords do not match"
-                }
-
-                if (validSignUp) {
-                    firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-                        .then(function (result) {
-                            result.user.updateProfile({
-                                displayName: name.value
-                            })
-                            window.location.replace("/home.html");
-                        })
-                        .catch(function (error) {
-                            errorMessage.innerHTML = error.message
-                        });
-                }
-            }
-        });
-
-        // Create an account
-        createAccount.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var name = document.querySelector('#name')
-            var email = document.querySelector('#email')
-            var password = document.querySelector('#password')
-            var confirmPassword = document.querySelector('#confirm-password')
-
-            name.classList.remove("display-none")
-            confirmPassword.classList.remove("display-none")
-            createAccount.classList.add("display-none")
-
-            submit.value = "Create Account"
-            logIn = 0
-        });
-
-        // Reset Password
-        document.querySelector('#reset-password').addEventListener('click', function (e) {
-            var auth = firebase.auth();
-            var emailAddress = document.querySelector('#email').value;
-                auth.sendPasswordResetEmail(emailAddress).then(function () {
-                // Email sent.
-            }).catch(function (error) {
-                var errorMessage = document.querySelector('#error-message')
-                errorMessage.innerHTML = error.message
-            });
-        });
-
-    </script>
-
 </body>
 
 </html>
