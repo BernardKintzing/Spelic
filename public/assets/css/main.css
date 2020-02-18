@@ -10,7 +10,6 @@
 		font-size: 100%;
 		font: inherit;
 		vertical-align: baseline;
-		overflow: hidden;
 	}
 
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -5294,6 +5293,7 @@
 		  }
 		  
 		  .material-icons{
+			font-size: 3em !important;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
