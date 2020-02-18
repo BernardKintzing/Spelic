@@ -7,7 +7,8 @@ function signIn() {
 		.auth()
 		.signInWithEmailAndPassword(email, password)
 		.then(function(result) {
-			window.location.replace("/home.html");
+			// TODO: see if the user is a teacher or student
+			window.location.replace("/teacherome.html");
 		})
 		.catch(function(error) {
 			errorMessage.innerHTML = error.message;

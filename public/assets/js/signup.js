@@ -15,7 +15,8 @@ function signUp() {
 				result.user.updateProfile({
 					displayName: name
 				});
-				window.location.replace("/home.html");
+				// TODO: see if the user is a teacher or student
+				window.location.replace("/teacherHome.html");
 			})
 			.catch(function(error) {
 				errorMessage.innerHTML = error.message;
