@@ -7,7 +7,7 @@ Account Settings:
 -->
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 <title>Account Settings</title>
@@ -36,45 +36,37 @@ Account Settings:
         </div>
     </div>
 
-</section>
+</section> -->
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Spelic | Account Settings</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+
+    <section id="main" class="wrapper alt">
+        <div class="inner">
+           
+    </section>
 
 <!-- Scripts -->
+<script src="/__/firebase/7.8.0/firebase-app.js"></script>
+<script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+<script src="/__/firebase/init.js"></script>
+
 <script src="assets/js/jquery.min.js"></script>
 <script src="assets/js/jquery.scrolly.min.js"></script>
 <script src="assets/js/jquery.scrollex.min.js"></script>
 <script src="assets/js/skel.min.js"></script>
 <script src="assets/js/util.js"></script>
 <script src="assets/js/main.js"></script>
-
-<script src="/__/firebase/7.8.0/firebase-app.js"></script>
-<script src="/__/firebase/7.8.0/firebase-auth.js"></script>
-<script src="/__/firebase/init.js"></script>
-
-<script>
-var user = firebase.auth().currentUser;
-const credential = firebase.auth.EmailAuthProvider.credential(
-    user.email,
-    userProvidedPassword
-    );
-
-    // Reauthenticate User before updating password
-    user.reauthenticateWithCredential(credential).then(function() {
-      // User re-authenticated.
-    }).catch(function(error) {
-      // An error happened.
-       var errorMessage = document.querySelector('#error-message')
-       errorMessage.innerHTML = error.message
-    });
-document.querySelector('#update-password').addEventListener('click', function (e) {
-    var email = user.email;
-    // Update Password
-    user.sendPasswordResetEmail(email).then(function() {
-      // Update successful.
-    }).catch(function(error) {
-      // An error happened.
-    });
-});
-</script>
+<script src="assets/js/accountSettings.js"></script>
 
 
 </body>

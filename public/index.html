@@ -1,27 +1,14 @@
+<!DOCTYPE HTML>
 <html>
+<body>
 
-<body onload="checkAuth()">
-
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <!-- Firebase Scripts -->
     <script src="/__/firebase/7.8.0/firebase-app.js"></script>
-
-    <!-- TODO: Add SDKs for Firebase products that you want to use -->
     <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
-
-    <!-- Initialize Firebase -->
+    <script src="/__/firebase/7.8.2/firebase-database.js"></script>
     <script src="/__/firebase/init.js"></script>
 
-    <script>
-        function checkAuth() {
-            firebase.auth().onAuthStateChanged(function (user) {
-                if (user) {
-                    window.location.replace("/home.html");
-                } else {
-                    window.location.replace("/login.html");
-                }
-            });
-        }
-    </script>
+    <script src="./assets/js/models/firebase.js"></script>
+    <script src="./assets/js/controllers/index.js"></script>
 </body>
-
 </html>
