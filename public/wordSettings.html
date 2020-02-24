@@ -1,64 +1,35 @@
 <!DOCTYPE html>
 <html>
 
-<!-- <head>
-  <title>Word Settings</title>
-  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
-</head>
-
-<body>
-  <div class="center">
-    <h1>Add word:</h1>
-    <input type="text" class="text-line" />
-  </div>
-
-  <div class="dropdown">
-    <button class="dropbtn">1st Grade</button>
-    <div class="dropdown-content">
-      <a href="#">2nd Grade</a>
-      <a href="#">3rd Grade</a>
-      <a href="#">4th Grade</a>
-      <a href="#">5th Grade</a>
-    </div>
-  </div>
-
-  <h3 class="wordsForGrades">
-    1st Grade
-    2nd Grade
-    3rd Grade
-    4th Grade
-    5th Grade
-  </h3> -->
-
-  <head>
-    <title>Spelic | Word Settings</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+<head>
+  <title>Spelic | Word Settings</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 
 <body>
 
-    <section id="main" class="wrapper alt">
-        <div class="inner">
-            <div class="form-wrapper">
-                <h1 id="title">Create Word</h1>
-                <p id="error-message"> </p>
+  <section id="main" class="wrapper alt">
+    <div class="inner">
+      <div class="form-wrapper">
+        <h1 id="title">Create Word</h1>
+        <p id="error-message"> </p>
 
-                <div class="form"> 
-                    <input type="text" name="new-word" id="new-word" placeholder="New Word">
-                    <select id="sort">
-                      <option id="first-grade">First Grade</option>
-                      <option id="second-grade">Second Grade</option>
-                      <option id="third-grade">Third Grade</option>
-                      <option id="fourth-grade">Fourth Grade</option>
-                      <option id="fifth-grade">Fifth Grade</option>
-                    </select>
+        <div class="form">
+          <input type="text" name="new-word" id="new-word" placeholder="New Word">
+          <select id="sort">
+            <option id="first-grade">First Grade</option>
+            <option id="second-grade">Second Grade</option>
+            <option id="third-grade">Third Grade</option>
+            <option id="fourth-grade">Fourth Grade</option>
+            <option id="fifth-grade">Fifth Grade</option>
+          </select>
 
-                    <input id="" type="submit" value="Add Word" class="special" onclick="addWord()">
-                </div>
-            </div>
-    </section>
+          <input id="" type="submit" value="Add Word" class="special" onclick="addWord()">
+        </div>
+      </div>
+  </section>
 
   <!-- Firebase Scripts -->
   <script src="/__/firebase/7.8.0/firebase-app.js"></script>
