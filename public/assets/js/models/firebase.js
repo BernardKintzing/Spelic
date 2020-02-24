@@ -70,10 +70,10 @@ async function updateUserDisplayName(name) {
 			displayName: name
 		})
 		.then(function() {
-			return true
+			return true;
 		})
 		.catch(function(error) {
-			return error
+			return error;
 		});
 }
 
@@ -86,5 +86,20 @@ async function sendPasswordResetEmail(email) {
 		})
 		.catch(function(error) {
 			return error;
+		});
+}
+
+// Firebase Realtime functions
+async function pushBlankUserToDatabase(user, status) {
+	return database
+		.ref("users/" + user.uid)
+		.set({
+			accountType: status
+		})
+		.then(function() {
+			return true;
+		})
+		.catch(function(error) {
+			return error
 		});
 }

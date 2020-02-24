@@ -1,29 +1,35 @@
 function signUp() {
 	var errorMessage = document.querySelector("#error-message");
-	var name = document.querySelector("#name").value
-	var email = document.querySelector("#email").value
-	var password = document.querySelector("#password").value
-	var confirmPassword = document.querySelector("#confirm-password").value
-
+	var name = document.querySelector("#name").value;
+	var email = document.querySelector("#email").value;
+	var password = document.querySelector("#password").value;
+	var confirmPassword = document.querySelector("#confirm-password").value;
 
 	if (password == confirmPassword) {
-		promise = createUserWithEmailAndPassword(email, password)
+		promise = createUserWithEmailAndPassword(email, password);
 
 		promise.then(function(result) {
-	
 			if (result.user != null) {
 				// User is successfully logged in
 
-				// TODO: dynamically redirect user based on if 
+				// TODO: dynamically redirect user based on if
 				// user account is teacher or student.
-				updateUserDisplayName(name)
-				window.location.replace("teacherHome.html");
+				updateUserDisplayName(name);
+				dbPromise = pushBlankUserToDatabase(result.user, "teacher");
+
+				dbPromise.then(function(result) {
+					if (result == true) {
+						window.location.replace("teacherHome.html");
+					} else {
+						alert(result)
+					}
+				});
 			} else {
 				// Error attempting to sign in user
-				errorMessage.innerHTML = result
+				errorMessage.innerHTML = result;
 			}
-		})
+		});
 	} else {
-		errorMessage.innerHTML = "Passwords do not match"
+		errorMessage.innerHTML = "Passwords do not match";
 	}
 }
