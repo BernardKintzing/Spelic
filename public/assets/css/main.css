@@ -10,10 +10,6 @@
 		font-size: 100%;
 		font: inherit;
 		vertical-align: baseline;
-<<<<<<< HEAD
-		
-=======
->>>>>>> c45e91dfb477be6cdaca294b4e4309aeba0387a6
 	}
 
 	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -1803,6 +1799,7 @@
 			background-color: aqua;
 			color: rebeccapurple;
 			text-decoration: none;
+			padding-top: 20px;
 		}
 
 		input[type="submit"].play,
@@ -5363,3 +5360,7 @@
   
  
   .dropdown:hover .dropbtn {background-color: grey;}
+
+.wordsForGrades{
+	font-display: underline;
+}
