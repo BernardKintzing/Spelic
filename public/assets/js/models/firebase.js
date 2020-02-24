@@ -100,6 +100,20 @@ async function pushBlankUserToDatabase(user, status) {
 			return true;
 		})
 		.catch(function(error) {
-			return error
+			return error;
+		});
+}
+
+async function addWordToDatabase(word, grade) {
+	return database
+		.ref("users/" + user.data.uid + "/words/" + grade)
+		.set({
+			word
+		})
+		.then(function() {
+			return true;
+		})
+		.catch(function(error) {
+			return error;
 		});
 }

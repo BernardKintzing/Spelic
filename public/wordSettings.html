@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Word Settings</title>
-<link rel="stylesheet" type="text/css" href="assets/css/main.css">
-</head>
-<body>
-<div class = "center">
-<h1>Add word:</h1>
-<input type="text" class="text-line" />
-</div>
 
-<div class="dropdown">
+<!-- <head>
+  <title>Word Settings</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+</head>
+
+<body>
+  <div class="center">
+    <h1>Add word:</h1>
+    <input type="text" class="text-line" />
+  </div>
+
+  <div class="dropdown">
     <button class="dropbtn">1st Grade</button>
     <div class="dropdown-content">
       <a href="#">2nd Grade</a>
@@ -20,14 +22,62 @@
     </div>
   </div>
 
-<h3 class = "wordsForGrades">
+  <h3 class="wordsForGrades">
     1st Grade
     2nd Grade
     3rd Grade
     4th Grade
     5th Grade
-</h3>
+  </h3> -->
+
+  <head>
+    <title>Spelic | Word Settings</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+
+    <section id="main" class="wrapper alt">
+        <div class="inner">
+            <div class="form-wrapper">
+                <h1 id="title">Create Word</h1>
+                <p id="error-message"> </p>
+
+                <div class="form"> 
+                    <input type="text" name="new-word" id="new-word" placeholder="New Word">
+                    <select id="sort">
+                      <option id="first-grade">First Grade</option>
+                      <option id="second-grade">Second Grade</option>
+                      <option id="third-grade">Third Grade</option>
+                      <option id="fourth-grade">Fourth Grade</option>
+                      <option id="fifth-grade">Fifth Grade</option>
+                    </select>
+
+                    <input id="" type="submit" value="Add Word" class="special" onclick="addWord()">
+                </div>
+            </div>
+    </section>
+
+  <!-- Firebase Scripts -->
+  <script src="/__/firebase/7.8.0/firebase-app.js"></script>
+  <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+  <script src="/__/firebase/7.8.2/firebase-database.js"></script>
+  <script src="/__/firebase/init.js"></script>
+
+  <script src="./assets/js/constants.js"></script>
+  <script src="./assets/js/models/firebase.js"></script>
+  <script src="./assets/js/controllers/wordSettings.js"></script>
+
+  <script src="assets/js/ui/jquery.min.js"></script>
+  <script src="assets/js/ui/jquery.scrolly.min.js"></script>
+  <script src="assets/js/ui/jquery.scrollex.min.js"></script>
+  <script src="assets/js/ui/skel.min.js"></script>
+  <script src="assets/js/ui/util.js"></script>
+  <script src="assets/js/ui/main.js"></script>
 
 
 </body>
+
 </html>
