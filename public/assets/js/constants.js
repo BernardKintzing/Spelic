@@ -1,0 +1,1 @@
+let ACCOUNT_TYPE_TEACHER = "teacher"
