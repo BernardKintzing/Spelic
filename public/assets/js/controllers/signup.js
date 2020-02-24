@@ -1,13 +1,13 @@
 function signUp() {
-	errorMessage = document.querySelector("#error-message");
-	name = document.querySelector("#name").value
-	email = document.querySelector("#email").value
-	password = document.querySelector("#password").value
-	confirmPassword = document.querySelector("#confirm-password").value
+	var errorMessage = document.querySelector("#error-message");
+	var name = document.querySelector("#name").value
+	var email = document.querySelector("#email").value
+	var password = document.querySelector("#password").value
+	var confirmPassword = document.querySelector("#confirm-password").value
 
 
 	if (password == confirmPassword) {
-		promise = createUserWithEmailAndPassword(name, email, password)
+		promise = createUserWithEmailAndPassword(email, password)
 
 		promise.then(function(result) {
 	
@@ -16,6 +16,7 @@ function signUp() {
 
 				// TODO: dynamically redirect user based on if 
 				// user account is teacher or student.
+				updateUserDisplayName(name)
 				window.location.replace("teacherHome.html");
 			} else {
 				// Error attempting to sign in user

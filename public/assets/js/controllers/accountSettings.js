@@ -1,35 +1,48 @@
-var user = firebase.auth().currentUser;
-console.log(user);
+// Variable
+var username = document.getElementById("name");
 
-firebase.auth().onAuthStateChanged(function(user) {
-	console.log(user);
+// Retrive current users information
+user.registerListener(function(val) {
+	if (val.displayName != null) {
+		username.value = val.displayName;
+	}
 });
 
-const credential = firebase.auth.EmailAuthProvider.credential(
-	user.email,
-	userProvidedPassword
-);
+// Update the name of user
+function updateName() {
+	promise = updateUserDisplayName(username.value);
 
-// Reauthenticate User before updating password
-user.reauthenticateWithCredential(credential)
-	.then(function() {
-		// User re-authenticated.
-	})
-	.catch(function(error) {
-		// An error happened.
-		var errorMessage = document.querySelector("#error-message");
-		errorMessage.innerHTML = error.message;
+	promise.then(function(result) {
+		if (result == true) {
+			alert("Name successfully updated");
+		} else {
+			alert(result);
+		}
 	});
-document
-	.querySelector("#update-password")
-	.addEventListener("click", function(e) {
-		var email = user.email;
-		// Update Password
-		user.sendPasswordResetEmail(email)
-			.then(function() {
-				// Update successful.
-			})
-			.catch(function(error) {
-				// An error happened.
-			});
+}
+
+function updatePassword() {
+	var email = user.data.email;
+
+	if (email != null) {
+		var promise = sendPasswordResetEmail(email);
+
+		promise.then(function(result) {
+			alert("Password reset email sent to: " + email);
+		});
+	} else {
+		alert("No email found");
+	}
+}
+
+function signOut() {
+	var promise = signOutFirebaseUser();
+
+	promise.then(function(result) {
+		if(result = true) {
+			window.location.replace("signin.html")
+		} else {
+			alert(result)
+		}
 	});
+}

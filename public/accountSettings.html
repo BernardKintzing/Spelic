@@ -52,22 +52,34 @@ Account Settings:
 
     <section id="main" class="wrapper alt">
         <div class="inner">
-           
+            <div class="form-wrapper">
+                <div class="form">
+                    <h1>Account Settings</h1>
+                    <input type="text" name="name" id="name" placeholder="Name">
+                    <input id="update-password" type="submit" value="Update Password" onclick="updatePassword()"/>
+                    <input id="" type="submit" value="Update Profile" class="special" onclick="updateName()">
+                    <input id="" type="submit" value="Sign Out" onclick="signOut()">
+                </div>
+            </div>
+        </div>
     </section>
 
-<!-- Scripts -->
-<script src="/__/firebase/7.8.0/firebase-app.js"></script>
-<script src="/__/firebase/7.8.0/firebase-auth.js"></script>
-<script src="/__/firebase/init.js"></script>
+    <!-- Firebase Scripts -->
+    <script src="/__/firebase/7.8.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.8.2/firebase-database.js"></script>
+    <script src="/__/firebase/init.js"></script>
 
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/jquery.scrolly.min.js"></script>
-<script src="assets/js/jquery.scrollex.min.js"></script>
-<script src="assets/js/skel.min.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/accountSettings.js"></script>
+    <script src="./assets/js/models/firebase.js"></script>
+    <script src="./assets/js/controllers/accountSettings.js"></script>
 
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
+
 </html>

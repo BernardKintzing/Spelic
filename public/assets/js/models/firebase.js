@@ -25,7 +25,6 @@ var user = {
 // If signed out, user is set to null
 auth.onAuthStateChanged(function(updatedUser) {
 	user.data = updatedUser;
-	console.log(updatedUser);
 });
 
 // Sign user in with a given username and email
@@ -41,13 +40,10 @@ async function signInWithEmailAndPassword(email, password) {
 }
 
 // Create a user account with given name, email, and password
-async function createUserWithEmailAndPassword(name, email, password) {
+async function createUserWithEmailAndPassword(email, password) {
 	return auth
 		.createUserWithEmailAndPassword(email, password)
 		.then(function(result) {
-			result.user.updateProfile({
-				displayName: name.value
-			});
 			return result;
 		})
 		.catch(function(error) {
@@ -64,6 +60,20 @@ async function signOutFirebaseUser() {
 		})
 		.catch(function(error) {
 			return error;
+		});
+}
+
+// Update the users display name in Firebase auth
+async function updateUserDisplayName(name) {
+	return user.data
+		.updateProfile({
+			displayName: name
+		})
+		.then(function() {
+			return true
+		})
+		.catch(function(error) {
+			return error
 		});
 }
 

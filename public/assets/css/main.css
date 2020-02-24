@@ -1475,12 +1475,12 @@
 		font-size: 1rem;
 		line-height: 2;
 	}
-
+/* 
 	input{
 		width: 15% !important;
 		margin-left: 25%;
 		margin-right: 60%;
-	}
+	} */
 
 	a {
 		-moz-transition: color 0.2s;
