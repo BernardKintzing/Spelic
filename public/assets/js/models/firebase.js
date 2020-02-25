@@ -1,6 +1,10 @@
 // Firebase Variables
 var auth = firebase.auth();
 var database = firebase.database();
+var functions = firebase.functions();
+
+// Functions variables
+var createStudentAccountFunction = functions.httpsCallable("createStudentAccountFunction")
 
 // User variables
 var user = {
@@ -116,4 +120,12 @@ async function addWordToDatabase(word, grade) {
 		.catch(function(error) {
 			return error;
 		});
+}
+
+// Interact with Firebase Functions
+
+async function createStudentAccount(studentName, studentPassword) {
+	createStudentAccountFunction({name: studentName, password: studentPassword}).then(function(result) {
+		console.log(result)
+	});
 }
