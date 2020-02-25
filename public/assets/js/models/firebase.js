@@ -125,7 +125,10 @@ async function addWordToDatabase(word, grade) {
 // Interact with Firebase Functions
 
 async function createStudentAccount(studentName, studentPassword) {
-	createStudentAccountFunction({name: studentName, password: studentPassword}).then(function(result) {
+	createStudentAccountFunction({text: studentName})
+	.then(function(result) {
 		console.log(result)
+	}).catch(function(error) {
+		console.log(error)
 	});
 }
