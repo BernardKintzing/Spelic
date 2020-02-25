@@ -4,7 +4,9 @@ var database = firebase.database();
 var functions = firebase.functions();
 
 // Functions variables
-var createStudentAccountFunction = functions.httpsCallable("createStudentAccountFunction")
+var createStudentAccountFunction = functions.httpsCallable(
+	"createStudentAccountFunction"
+);
 
 // User variables
 var user = {
@@ -94,9 +96,9 @@ async function sendPasswordResetEmail(email) {
 }
 
 // Firebase Realtime functions
-async function pushBlankUserToDatabase(user, status) {
+async function pushBlankUserToDatabase(uid, status) {
 	return database
-		.ref("users/" + user.uid)
+		.ref("users/" + uid)
 		.set({
 			accountType: status
 		})
@@ -111,7 +113,7 @@ async function pushBlankUserToDatabase(user, status) {
 async function addWordToDatabase(word, grade) {
 	return database
 		.ref("users/" + user.data.uid + "/words/" + grade)
-		.set({
+		.push({
 			word
 		})
 		.then(function() {
@@ -122,13 +124,73 @@ async function addWordToDatabase(word, grade) {
 		});
 }
 
+async function addStudentToTeacher(uid) {
+	promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT);
+
+	return promise.then(function(result) {
+		if (result == true) {
+			return database
+				.ref("users/" + user.data.uid + "/students/")
+				.push({
+					uid
+				})
+				.then(function() {
+					return true;
+				})
+				.catch(function(error) {
+					return error;
+				});
+		} else {
+			alert(error);
+		}
+	});
+}
+
+async function getUserAccountType() {
+	console.log("in")
+	return database
+		.ref("users/" + user.data.uid + "/accountType/")
+		.once("value")
+		.then(function(snapshot) {
+			// Convert the snapshot into an array
+			return [true, snapshot.val()]
+		})
+		.catch(function(error) {
+			console.log(error);
+			return [false, error];
+		});
+}
+
 // Interact with Firebase Functions
 
 async function createStudentAccount(studentName, studentPassword) {
-	createStudentAccountFunction({text: studentName})
-	.then(function(result) {
-		console.log(result)
-	}).catch(function(error) {
-		console.log(error)
-	});
+	createStudentAccountFunction({
+		name: studentName,
+		password: studentPassword,
+		teacherName: user.data.displayName
+	})
+		.then(function(result) {
+			if (result.data.uid != null) {
+				promise = addStudentToTeacher(result.data.uid);
+
+				promise
+					.then(function(result) {
+						if (result == true) {
+							alert("Student successfully created");
+						} else {
+							alert(result);
+						}
+					})
+					.catch(function(error) {
+						alert(error);
+					});
+			} else if (result.data.error != null) {
+				alert(result.data.error.errorInfo.message);
+			} else {
+				alert("An unknown error occured");
+			}
+		})
+		.catch(function(error) {
+			alert(error);
+		});
 }

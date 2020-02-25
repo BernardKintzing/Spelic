@@ -15,7 +15,7 @@ function signUp() {
 				// TODO: dynamically redirect user based on if
 				// user account is teacher or student.
 				updateUserDisplayName(name);
-				dbPromise = pushBlankUserToDatabase(result.user, ACCOUNT_TYPE_TEACHER);
+				dbPromise = pushBlankUserToDatabase(result.user.uid, ACCOUNT_TYPE_TEACHER);
 
 				dbPromise.then(function(result) {
 					if (result == true) {

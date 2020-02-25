@@ -6,5 +6,13 @@ var studentConfirmPassword = document.getElementById(
 
 // Create a student account
 async function addStudentAccount() {
-	createStudentAccount("name", "password")
+	var name = studentName.value;
+	var password = studentPassword.value;
+	var confirmPassword = studentConfirmPassword.value;
+
+	if (password == confirmPassword) {
+		createStudentAccount(name, password);
+	} else {
+		alert("Passwords do not match");
+	}
 }
