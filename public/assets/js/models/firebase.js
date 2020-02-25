@@ -146,14 +146,33 @@ async function addStudentToTeacher(uid) {
 	});
 }
 
+async function retrieveStudents() {
+	console.log(user.data)
+	var students = [];
+	return database
+		.ref("users/" + user.data.uid + "/students/")
+		.once("value")
+		.then(function(snapshot) {
+			snapshot.forEach(function(studentSnapshot) {
+				students.push(studentSnapshot.val().uid);
+			});
+
+			console.log(students)
+			return [true, students];
+		})
+		.catch(function(error) {
+			console.log(error);
+			return [false, error];
+		});
+}
+
 async function getUserAccountType() {
-	console.log("in")
 	return database
 		.ref("users/" + user.data.uid + "/accountType/")
 		.once("value")
 		.then(function(snapshot) {
 			// Convert the snapshot into an array
-			return [true, snapshot.val()]
+			return [true, snapshot.val()];
 		})
 		.catch(function(error) {
 			console.log(error);
