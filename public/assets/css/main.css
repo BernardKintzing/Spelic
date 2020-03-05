@@ -1799,7 +1799,7 @@
 			background-color: aqua;
 			color: rebeccapurple;
 			text-decoration: none;
-			padding-top: 20px;
+			margin-top: 5rem;
 		}
 
 		input[type="submit"].play,
