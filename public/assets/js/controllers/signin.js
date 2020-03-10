@@ -17,7 +17,7 @@ function signIn() {
 			promise.then(function(result) {
 				if(result[0] == true) {
 					if(result[1] == ACCOUNT_TYPE_TEACHER) {
-						window.location.replace("teacherHome.html")
+						window.location.replace("teacher/home.html")
 					} else if(result[1] == ACCOUNT_TYPE_STUDENT) {
 						window.location.replace("studentHome.html")
 					} else {

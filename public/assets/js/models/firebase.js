@@ -49,7 +49,7 @@ var realtimeTeacher = {
  * @param {firebase.auth().user} updatedUser 
  */
 auth.onAuthStateChanged(function(updatedUser) {
-	user.data = updatedUser;
+	authUser.data = updatedUser;
 });
 
 /**
@@ -129,7 +129,7 @@ async function signOutFirebaseUser() {
  * else an error is returned.
  */
 async function updateUserDisplayName(name) {
-	return user.data
+	return authUser.data
 		.updateProfile({
 			displayName: name
 		})
@@ -208,7 +208,7 @@ async function pushBlankUserToDatabase(uid, status) {
  */
 async function addWordToDatabase(word, grade) {
 	return database
-		.ref("users/" + user.data.uid + "/words/" + grade)
+		.ref("users/" + authUser.data.uid + "/words/" + grade)
 		.push({
 			word
 		})
@@ -240,7 +240,7 @@ async function addStudentToTeacher(uid) {
 	return promise.then(function(result) {
 		if (result == true) {
 			return database
-				.ref("users/" + user.data.uid + "/students/")
+				.ref("users/" + authUser.data.uid + "/students/")
 				.push({
 					uid
 				})
@@ -274,7 +274,7 @@ async function addStudentToTeacher(uid) {
 async function retrieveStudents() {
 	var students = [];
 	return database
-		.ref("users/" + user.data.uid + "/students/")
+		.ref("users/" + authUser.data.uid + "/students/")
 		.once("value")
 		.then(function(snapshot) {
 			snapshot.forEach(function(studentSnapshot) {
@@ -303,7 +303,7 @@ async function retrieveStudents() {
  */
 async function getUserAccountType() {
 	return database
-		.ref("users/" + user.data.uid + "/accountType/")
+		.ref("users/" + authUser.data.uid + "/accountType/")
 		.once("value")
 		.then(function(snapshot) {
 			// Convert the snapshot into an array
@@ -314,12 +314,26 @@ async function getUserAccountType() {
 		});
 }
 
-// Interact with Firebase Functions
+/**
+ * @description Attempt to create a student account. 
+ * using Firebase Authentication Admin on Firebase
+ * Functions.
+ * @see createStudentAccountFunction
+ * 
+ * @async
+ * @function createStudentAccount
+ * @param {String} studentName 
+ * @param {String} studentPassword 
+ * 
+ * @todo add check to make sure that only a teacher can 
+ * add a student.
+ * @todo possibly return the error instead of alerting the user.
+ */
 async function createStudentAccount(studentName, studentPassword) {
 	createStudentAccountFunction({
 		name: studentName,
 		password: studentPassword,
-		teacherName: user.data.displayName
+		teacherName: authUser.data.displayName
 	})
 		.then(function(result) {
 			if (result.data.uid != null) {

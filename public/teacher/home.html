@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Teacher Menu Page</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+
+    <section class="wrapper">
+        <div class="inner">
+            <h1 id="title-header">Welcome</h1>
+            <!-- <li ><a href="#"></a></li> -->
+            <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')"
+                class="icon fa-user"></a>
+            <input id="" type="button" value="Edit Words" onclick="displayModal('editWords')" />
+            <input id="" type="button" value="Create Student" onclick="displayModal('createStudent')" />
+            <a class="button" href="../game.html">Test Game</a>
+        </div>
+    </section>
+
+    <div class="modal" id="profile">
+        <div class="content">
+            <span class="close" onclick="closeModal('profile')">&times;</span>
+            <section class="wrapper">
+                <div class="inner">
+                    <h1>Account Settings</h1>
+                    <div class="row uniform">
+                        <div class="6u 12u$(xsmall)">
+                            <input type="text" name="name" id="name" placeholder="Name">
+                        </div>
+                        <div class="6u 12u$(xsmall)">
+                            <input id="" type="submit" value="Update Name" class="special" onclick="updateName()">
+                        </div>
+                        <div class="6u 12u$(xsmall)">
+                            <input id="update-password" type="submit" value="Update Password"
+                                onclick="updatePassword()" />
+                        </div>
+                        <div class="6u 12u$(xsmall)">
+                            <input id="" type="submit" value="Sign Out" onclick="signOut()">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="modal" id="createStudent">
+        <div class="content">
+            <span class="close" onclick="closeModal('createStudent')">&times;</span>
+            <section class="wrapper">
+                <div class="inner">
+                    <div class="form">
+                        <input type="text" name="student-name" id="student-name" placeholder="Student Name">
+                        <input type="password" name="student-password" id="student-password" placeholder="Student Password">
+                        <input type="password" name="student-confirm-password" id="student-confirm-password"
+                            placeholder="Confirm Student Password">
+    
+                        <input id="" type="submit" value="Create Account" class="special" onclick="addStudentAccount()">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="modal" id="editWords">
+        <div class="content">
+            <span class="close" onclick="closeModal('editWords')">&times;</span>
+            <section class="wrapper">
+                <div class="inner">
+                    <div class="form">
+                        <div class="row uniform">
+                            <div class="6u 12u$(xsmall)">
+                                <input type="text" name="new-word" id="new-word" placeholder="New Word">
+                            </div>
+                            <div class="6u$ 12u$(xsmall)">
+                                <select id="sort">
+                                    <option id="first-grade">First Grade</option>
+                                    <option id="second-grade">Second Grade</option>
+                                    <option id="third-grade">Third Grade</option>
+                                    <option id="fourth-grade">Fourth Grade</option>
+                                    <option id="fifth-grade">Fifth Grade</option>
+                                </select>
+                            </div>
+                            <div class="6u$ 12u$(xsmall)">
+                                <input id="" type="submit" value="Add Word" class="special" onclick="addWord()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/__/firebase/7.8.0/firebase-app.js"></script>
+    <script src="/__/firebase/7.8.0/firebase-auth.js"></script>
+    <script src="/__/firebase/7.8.2/firebase-database.js"></script>
+    <script src="/__/firebase/7.9.1/firebase-functions.js"></script>
+    <script src="/__/firebase/init.js"></script>
+
+    <script src="../assets/js/constants.js"></script>
+    <script src="../assets/js/models/firebase.js"></script>
+    <script src="../assets/js/controllers/teacher/home.js"></script>
+
+    <script src="../assets/js/ui/jquery.min.js"></script>
+    <script src="../assets/js/ui/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/ui/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/ui/skel.min.js"></script>
+    <script src="../assets/js/ui/util.js"></script>
+    <script src="../assets/js/ui/main.js"></script>
+</body>
+
+</html>

@@ -19,7 +19,7 @@ function signUp() {
 
 				dbPromise.then(function(result) {
 					if (result == true) {
-						window.location.replace("teacherHome.html");
+						window.location.replace("teacher/home.html");
 					} else {
 						alert(result)
 					}
