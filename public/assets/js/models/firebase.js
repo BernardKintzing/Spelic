@@ -303,6 +303,31 @@ async function retrieveStudents() {
 }
 
 /**
+ * @description Retrieve a list of all custom words the 
+ * teacher has added to her account.
+ * 
+ * @async
+ * @function retrieveWords
+ * @returns {Promise} On success the Firebase Database
+ * snapshot of custom words is returned, else the error
+ * is returned.
+ * 
+ * @todo error handling if authUser.data.uid is null
+ * @todo catch to prevent student from calling function
+ */
+async function retrieveWords() {
+	return database
+		.ref("users/" + authUser.data.uid + "/words/")
+		.once("value")
+		.then(function(snapshot) {
+			return snapshot;
+		})
+		.catch(function(error) {
+			return error;
+		});
+}
+
+/**
  * @description retrieve the account type of the signed in user
  * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT.
  *
@@ -396,11 +421,11 @@ async function retrieveStudentNames(studentIDs) {
 	for (i = 0; i < studentIDs.length; i++) {
 		var promise = retrieveStudentNamesFunction({
 			id: studentIDs[i]
-		})
-		promises.push(promise)
+		});
+		promises.push(promise);
 	}
 
-	return Promise.all(promises).then(function(values){
-		return values
-	})
+	return Promise.all(promises).then(function(values) {
+		return values;
+	});
 }

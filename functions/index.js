@@ -3,9 +3,23 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+
+/**
+ * @description Attempt to create a student account using 
+ * Firebase Admin function. 
+ * @see admin.auth().createUser()
+ * 
+ * @async
+ * @function
+ * @param {String} name displayName for student account
+ * @param {String} password the password for new student account
+ * @param {String} teacherName displayName of students teacher
+ * @returns {Promise} on success the uid of the new student is 
+ * returned, else an error is returned.
+ * 
+ * @todo rethink student email format. Current has high potential 
+ * for duplicates.
+ */
 exports.createStudentAccountFunction = functions.https.onCall(
 	(data, context) => {
 		return admin

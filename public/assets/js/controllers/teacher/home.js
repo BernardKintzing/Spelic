@@ -27,36 +27,43 @@ var studentConfirmPassword = document.getElementById(
  * user is signed in we update their name across the dashboard.
  */
 authUser.registerListener(function(val) {
-    if(val != null) {
-        if (val.displayName != null) {
-            username.value = val.displayName;
-            titleHeader.innerHTML = "Welcome " + val.displayName
-        } else {
-            username.value = null
-        }
+	if (val != null) {
+		if (val.displayName != null) {
+			username.value = val.displayName;
+			titleHeader.innerHTML = "Welcome " + val.displayName;
+		} else {
+			username.value = null;
+		}
 
-        populateStudents()
-    } 
+		populateStudents();
+		populateWords();
+	}
 });
 
 /**
  * @description Populate a ul with the name and id's of all
  * the students registered under a teacher.
  * @see retrieveStudents
- * 
+ *
  * @function populateStudents
- * 
+ *
  * @todo check data flow for unhandled errors
  */
 function populateStudents() {
-    let studentsList = document.getElementById("students-list")
-    studentsList.innerHTML = "";
-    
-	promise = retrieveStudents();
+	let studentsList = document.getElementById("students-list");
+	studentsList.innerHTML = "";
+
+	var promise = retrieveStudents();
 	promise.then(function(result) {
 		if (result[0] == true) {
 			for (i = 0; i < result[1].length; i++) {
-				studentsList.innerHTML += "<li>" + result[1][i].data[1].charAt(0).toUpperCase() + result[1][i].data[1].slice(1) + ", (" + result[1][i].data[0] + ")</li>";
+				studentsList.innerHTML +=
+					"<li>" +
+					result[1][i].data[1].charAt(0).toUpperCase() +
+					result[1][i].data[1].slice(1) +
+					", (" +
+					result[1][i].data[0] +
+					")</li>";
 			}
 		} else {
 			alert[result[1]];
@@ -65,9 +72,53 @@ function populateStudents() {
 }
 
 /**
+ * @description Populate ul with a list of all custom words
+ * the teacher has created.
+ * @see retrieveWords
+ *
+ * @function populateWords
+ *
+ * @todo check data flow for unhandled errors
+ */
+function populateWords() {
+	let wordsList = document.getElementById("custom-words");
+	wordsList.innerHTML = "";
+
+	var promise = retrieveWords();
+	promise.then(function(result) {
+		result.forEach(function(gradeSnapshot) {
+			let grade = parseInt(gradeSnapshot.key);
+			switch (grade) {
+				case FIRST_GRADE:
+					wordsList.innerHTML += "<h3>First Grade</h3>";
+					break;
+				case SECOND_GRADE:
+					wordsList.innerHTML += "<h3>Second Grade</h3>";
+					break;
+				case THIRD_GRADE:
+					wordsList.innerHTML += "<h3>Third Grade</h3>";
+					break;
+				case FOURTH_GRADE:
+					wordsList.innerHTML += "<h3>Fourth Grade</h3>";
+					break;
+				case FIFTH_GRADE:
+					wordsList.innerHTML += "<h3>Fifth Grade</h3>";
+					break;
+			}
+
+			gradeSnapshot.forEach(function(wordSnapshot) {
+				// console.log(wordSnapshot.val())
+				wordsList.innerHTML +=
+					"<li>" + wordSnapshot.val().word + "</li>";
+			});
+		});
+	});
+}
+
+/**
  * @description Update the display name of the current user.
  * @see updateUserDisplayName
- * 
+ *
  * @function updateName
  */
 function updateName() {
@@ -75,7 +126,7 @@ function updateName() {
 
 	promise.then(function(result) {
 		if (result == true) {
-            titleHeader.innerHTML = "Welcome " + username.value
+			titleHeader.innerHTML = "Welcome " + username.value;
 			alert("Name successfully updated");
 		} else {
 			alert(result);
@@ -88,7 +139,7 @@ function updateName() {
  * user by sending a recovery link to users email.
  * Uses Firebase Authentication Function.
  * @see sendPasswordResetEmail
- * 
+ *
  * @function updatePassword
  */
 function updatePassword() {
@@ -109,17 +160,17 @@ function updatePassword() {
  * @description sign out the current user and return them
  * to the home page. Uses Firebase Authentication function.
  * @see signOutFirebaseUser
- * 
+ *
  * @function signOut
  */
 function signOut() {
 	var promise = signOutFirebaseUser();
 
 	promise.then(function(result) {
-		if(result = true) {
-			window.location.replace("/")
+		if ((result = true)) {
+			window.location.replace("/");
 		} else {
-			alert(result)
+			alert(result);
 		}
 	});
 }
@@ -128,9 +179,9 @@ function signOut() {
  * @description create a student account using Firebase
  * Authentication methods.
  * @see createStudentAccount
- * 
+ *
  * @function addStudentAccount
- * 
+ *
  * @todo handle promise
  * @todo update ui with new student
  */
@@ -147,13 +198,13 @@ function addStudentAccount() {
 }
 
 /**
- * @description Attempt to add a new word to the database. 
+ * @description Attempt to add a new word to the database.
  * Inputs are taken from wordInputField and from sort.
- * 
+ *
  * @function addWord
- * 
- * @todo Create check to make sure word input field is 
- * popolated and that a grade is selected. 
+ *
+ * @todo Create check to make sure word input field is
+ * popolated and that a grade is selected.
  */
 function addWord() {
 	var newWord = wordInputField.value;
@@ -172,25 +223,24 @@ function addWord() {
 
 /**
  * @description Display a modal with given id.
- * 
+ *
  * @function displayModal
  * @param {String} modalName ID of modal being opened
- * 
+ *
  * @todo prevent one model from opening if another is open
  */
 function displayModal(modalName) {
-    let modal = document.getElementById(modalName)
-    modal.style.display = "block";
+	let modal = document.getElementById(modalName);
+	modal.style.display = "block";
 }
 
 /**
- * @description Close a model with given id. 
- * 
+ * @description Close a model with given id.
+ *
  * @function closeModal
  * @param {String} modalName Id of the modal being hidden
  */
 function closeModal(modalName) {
-    let modal = document.getElementById(modalName)
-    modal.style.display = "none";
+	let modal = document.getElementById(modalName);
+	modal.style.display = "none";
 }
-
