@@ -5557,6 +5557,13 @@
 	background-repeat: no-repeat;
   }
 
+  #buttons {
+	  position: absolute;
+	  bottom: 3rem;
+	  left: 50%;
+	  transform: translateX(-50%);
+  }
+
   #earth {
 	  background-image: url("../images/earth.png");
 	  background-size: contain;
@@ -5564,8 +5571,30 @@
 	  position: absolute;
 	  right: -30vh;
 	  top: 20vh;
-
 	  height: 60vh;
 	  width: 60vh;
 	  z-index: 10000;
   }
+
+  #asteroid {
+	background-image: url("../images/asteroid.png");
+	background-size: contain;
+	background-repeat: no-repeat;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	height: 10rem;
+	/* height: auto; */
+	width: 20rem;
+	z-index: 10000;
+  }
+
+  	#asteroid h1 {
+		font-weight: bold;
+		color: #ffffff;
+		position: absolute;
+		right: 1rem;
+		top: 50%;
+		transform: translateY(-50%);
+	}
