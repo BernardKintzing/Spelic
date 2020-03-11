@@ -8,6 +8,10 @@ var createStudentAccountFunction = functions.httpsCallable(
 	"createStudentAccountFunction"
 );
 
+var retrieveStudentNamesFunction = functions.httpsCallable(
+	"retrieveStudentNamesFunction"
+);
+
 /**
  * @description extension on Firebase Authentication
  * user object. Implements listener functionality
@@ -44,9 +48,9 @@ var realtimeTeacher = {
 /**
  * @description Firebase Authentication default
  * function triggered by user sign in or sign
- * out. Updates local authUser var. 
- * 
- * @param {firebase.auth().user} updatedUser 
+ * out. Updates local authUser var.
+ *
+ * @param {firebase.auth().user} updatedUser
  */
 auth.onAuthStateChanged(function(updatedUser) {
 	authUser.data = updatedUser;
@@ -54,12 +58,12 @@ auth.onAuthStateChanged(function(updatedUser) {
 
 /**
  * @description Attempt to sign in user
- * 
+ *
  * @async
  * @function signInWithEmailAndPassword
- * @param {String} email 
- * @param {String} password 
- * @return {Promise} If successful the Firebase 
+ * @param {String} email
+ * @param {String} password
+ * @return {Promise} If successful the Firebase
  * Authentication user object is return, else error
  * is returned.
  */
@@ -75,14 +79,14 @@ async function signInWithEmailAndPassword(email, password) {
 }
 
 /**
- * @description Attempt to create a user account in 
+ * @description Attempt to create a user account in
  * Firebase Authentication
- * 
+ *
  * @async
  * @function createUserWithEmailAndPassword
- * @param {String} email 
- * @param {String} password 
- * @returns {Promise} On success the the Firebase 
+ * @param {String} email
+ * @param {String} password
+ * @returns {Promise} On success the the Firebase
  * Authentication user object is returned, else
  * the error is returned.
  */
@@ -98,9 +102,9 @@ async function createUserWithEmailAndPassword(email, password) {
 }
 
 /**
- * @description Attempt to sign out the 
+ * @description Attempt to sign out the
  * current user.
- * 
+ *
  * @async
  * @function signOutFirebaseUser
  * @returns {Promise} On success a boolean true
@@ -119,12 +123,12 @@ async function signOutFirebaseUser() {
 
 /**
  * @description Attempt to update the display name of
- * current user. The display name is stored in the 
+ * current user. The display name is stored in the
  * users Firebase Authentication user object.
- * 
+ *
  * @async
  * @function updateUserDisplayName
- * @param {String} name Updated name for current user 
+ * @param {String} name Updated name for current user
  * @returns {Promise} On success boolean true is returned
  * else an error is returned.
  */
@@ -144,15 +148,15 @@ async function updateUserDisplayName(name) {
 /**
  * @description Attempt to send a password reset email
  * using Firebase Authentication method. This method
- * is only used to reset the password of a teacher 
- * account. Student password reset is done through 
+ * is only used to reset the password of a teacher
+ * account. Student password reset is done through
  * Firebase Admin.
  * @see resetStudentPassword
- * 
+ *
  * @async
  * @function sendPasswordResetEmail
  * @param {String} email teachers email.
- * @returns {Promise} Return the message to be displayed 
+ * @returns {Promise} Return the message to be displayed
  * to user.
  */
 async function sendPasswordResetEmail(email) {
@@ -170,14 +174,14 @@ async function sendPasswordResetEmail(email) {
 
 /**
  * @description create a new user account in Firebase
- * Realtime Database. 
- * 
+ * Realtime Database.
+ *
  * @async
  * @function pushBlankUserToDatabase
  * @param {String} uid The unique id of the user provided
  * my Firebase Authentication.
  * @param {String} status The account type of the user
- * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT. 
+ * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT.
  * @returns {Promise} On success return the boolean true
  * else return the error.
  */
@@ -197,13 +201,13 @@ async function pushBlankUserToDatabase(uid, status) {
 /**
  * @description Attempt to add a custom word to to a teachers
  * profile in the databse.
- * 
+ *
  * @async
  * @function addWordToDatabase
- * @param {String} word Teachers custom word 
+ * @param {String} word Teachers custom word
  * @param {String} grade The grade that the word is associated
  * with.
- * @returns {Promise} On success a boolean true is returned 
+ * @returns {Promise} On success a boolean true is returned
  * else the error is returned
  */
 async function addWordToDatabase(word, grade) {
@@ -222,16 +226,16 @@ async function addWordToDatabase(word, grade) {
 
 /**
  * @description Creates the association of a student to a
- * teacher. Once the student account is created there 
+ * teacher. Once the student account is created there
  * account is added to the datanse as well as the association
  * under the teachers account.
  * @see createStudentAccount
  * @see pushBlankUserToDatabase
- * 
+ *
  * @async
  * @function addStudentToTeacher
  * @param {String} uid The unique identifier of the student account
- * @returns {Promise} On success true is returned, else the 
+ * @returns {Promise} On success true is returned, else the
  * error is returned.
  */
 async function addStudentToTeacher(uid) {
@@ -258,16 +262,19 @@ async function addStudentToTeacher(uid) {
 }
 
 /**
- * @description retrieve all the students associated with the currently 
- * signed in account. 
- * 
+ * @description retrieve all the students associated with the currently
+ * signed in account. First the id's are retrieved from the teachers
+ * database profile, then the names are retrieved using a Firebase
+ * Authentication Admin function
+ * @see retrieveStudentNames
+ *
  * @async
  * @function retrieveStudents
- * @returns {Promise} An array of length two is returned. Index 0 of the 
- * promise holds a boolean variable true or false depending on the 
+ * @returns {Promise} An array of length two is returned. Index 0 of the
+ * promise holds a boolean variable true or false depending on the
  * success of the retrieval. On success the 1 index holds an array of
  * students, else an error is returned ain index 1.
- * 
+ *
  * @todo Add protection to prevent this function from being called
  * if a student is signed in .
  */
@@ -281,11 +288,16 @@ async function retrieveStudents() {
 				students.push(studentSnapshot.val().uid);
 			});
 
-			console.log(students);
-			return [true, students];
+			var promise = retrieveStudentNames(students);
+			return promise
+				.then(function(result) {
+					return [true, result];
+				})
+				.catch(function(error) {
+					console.log(error);
+				});
 		})
 		.catch(function(error) {
-			console.log(error);
 			return [false, error];
 		});
 }
@@ -293,7 +305,7 @@ async function retrieveStudents() {
 /**
  * @description retrieve the account type of the signed in user
  * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT.
- * 
+ *
  * @async
  * @function getUserAccountType
  * @returns {Promise} An array of length two is returned. Index 0
@@ -315,17 +327,17 @@ async function getUserAccountType() {
 }
 
 /**
- * @description Attempt to create a student account. 
+ * @description Attempt to create a student account.
  * using Firebase Authentication Admin on Firebase
  * Functions.
  * @see createStudentAccountFunction
- * 
+ *
  * @async
  * @function createStudentAccount
- * @param {String} studentName 
- * @param {String} studentPassword 
- * 
- * @todo add check to make sure that only a teacher can 
+ * @param {String} studentName
+ * @param {String} studentPassword
+ *
+ * @todo add check to make sure that only a teacher can
  * add a student.
  * @todo possibly return the error instead of alerting the user.
  */
@@ -359,4 +371,36 @@ async function createStudentAccount(studentName, studentPassword) {
 		.catch(function(error) {
 			alert(error);
 		});
+}
+
+/**
+ * @description Attempt to retrieve a list of student
+ * names for a given list of student ids using Firebase
+ * Authentication Admin.
+ * @see retrieveStudentNamesFunction
+ *
+ * @async
+ * @function retrieveStudentNames
+ * @param {[String]} studentIDs a list of the student
+ * ids which require a name
+ * @returns {Promise} an array of length two is returned.
+ * The 0 index holds a boolean depending on the success of
+ * the retrieval. If successful index 1 holds a list of
+ * student names, else this index is filled with an error.
+ */
+async function retrieveStudentNames(studentIDs) {
+	// console.log(studentIDs)
+	var studentData = [];
+	var promises = [];
+
+	for (i = 0; i < studentIDs.length; i++) {
+		var promise = retrieveStudentNamesFunction({
+			id: studentIDs[i]
+		})
+		promises.push(promise)
+	}
+
+	return Promise.all(promises).then(function(values){
+		return values
+	})
 }

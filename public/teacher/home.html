@@ -11,12 +11,23 @@
 
 <body>
 
+    <header id="header">
+        <a class="logo" id="title-header">Spelic</a>
+        <nav>
+            <ul>
+                <li>
+                    <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')" class="icon fa-user"></a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
     <section class="wrapper">
         <div class="inner">
-            <h1 id="title-header">Welcome</h1>
-            <!-- <li ><a href="#"></a></li> -->
-            <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')"
-                class="icon fa-user"></a>
+
+            <h2>Students</h2>
+            <ul id="students-list"></ul>
+            
             <input id="" type="button" value="Edit Words" onclick="displayModal('editWords')" />
             <input id="" type="button" value="Create Student" onclick="displayModal('createStudent')" />
             <a class="button" href="../game.html">Test Game</a>
@@ -56,10 +67,11 @@
                 <div class="inner">
                     <div class="form">
                         <input type="text" name="student-name" id="student-name" placeholder="Student Name">
-                        <input type="password" name="student-password" id="student-password" placeholder="Student Password">
+                        <input type="password" name="student-password" id="student-password"
+                            placeholder="Student Password">
                         <input type="password" name="student-confirm-password" id="student-confirm-password"
                             placeholder="Confirm Student Password">
-    
+
                         <input id="" type="submit" value="Create Account" class="special" onclick="addStudentAccount()">
                     </div>
                 </div>

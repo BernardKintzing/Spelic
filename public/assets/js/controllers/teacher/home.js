@@ -27,11 +27,42 @@ var studentConfirmPassword = document.getElementById(
  * user is signed in we update their name across the dashboard.
  */
 authUser.registerListener(function(val) {
-	if (val.displayName != null) {
-        username.value = val.displayName;
-        titleHeader.innerHTML = "Welcome " + val.displayName
-	}
+    if(val != null) {
+        if (val.displayName != null) {
+            username.value = val.displayName;
+            titleHeader.innerHTML = "Welcome " + val.displayName
+        } else {
+            username.value = null
+        }
+
+        populateStudents()
+    } 
 });
+
+/**
+ * @description Populate a ul with the name and id's of all
+ * the students registered under a teacher.
+ * @see retrieveStudents
+ * 
+ * @function populateStudents
+ * 
+ * @todo check data flow for unhandled errors
+ */
+function populateStudents() {
+    let studentsList = document.getElementById("students-list")
+    studentsList.innerHTML = "";
+    
+	promise = retrieveStudents();
+	promise.then(function(result) {
+		if (result[0] == true) {
+			for (i = 0; i < result[1].length; i++) {
+				studentsList.innerHTML += "<li>" + result[1][i].data[1].charAt(0).toUpperCase() + result[1][i].data[1].slice(1) + ", (" + result[1][i].data[0] + ")</li>";
+			}
+		} else {
+			alert[result[1]];
+		}
+	});
+}
 
 /**
  * @description Update the display name of the current user.
@@ -101,6 +132,7 @@ function signOut() {
  * @function addStudentAccount
  * 
  * @todo handle promise
+ * @todo update ui with new student
  */
 function addStudentAccount() {
 	var name = studentName.value;
@@ -119,6 +151,9 @@ function addStudentAccount() {
  * Inputs are taken from wordInputField and from sort.
  * 
  * @function addWord
+ * 
+ * @todo Create check to make sure word input field is 
+ * popolated and that a grade is selected. 
  */
 function addWord() {
 	var newWord = wordInputField.value;
