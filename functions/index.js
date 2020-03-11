@@ -42,8 +42,17 @@ exports.createStudentAccountFunction = functions.https.onCall(
 );
 
 /**
- * @todo change function to retrieve only one name for one uid
- * and have it be called multiple times.
+ * @description Retrieve the name of student given their uid.
+ * Uses Firebase Authentication Admin functions.
+ * @see admin.auth().getUser()
+ * 
+ * @async
+ * @function retrieveStudentNamesFunction
+ * @param {String} id the firebase auth id of the requested 
+ * student
+ * @returns {Promise} on success an array or length two is 
+ * is returned in the format: [uid, displayName]. On error
+ * the array is in format: ["nil", error]
  */
 exports.retrieveStudentNamesFunction = functions.https.onCall(
 	(data, context) => {

@@ -205,6 +205,7 @@ function addStudentAccount() {
  *
  * @todo Create check to make sure word input field is
  * popolated and that a grade is selected.
+ * @todo update ui with new word
  */
 function addWord() {
 	var newWord = wordInputField.value;

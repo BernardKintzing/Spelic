@@ -5556,3 +5556,16 @@
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
   }
+
+  #earth {
+	  background-image: url("../images/earth.png");
+	  background-size: contain;
+	  background-repeat: no-repeat;
+	  position: absolute;
+	  right: -30vh;
+	  top: 20vh;
+
+	  height: 60vh;
+	  width: 60vh;
+	  z-index: 10000;
+  }
