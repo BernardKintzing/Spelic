@@ -328,6 +328,33 @@ async function retrieveWords() {
 }
 
 /**
+ * @description retrieve the default words for a given 
+ * grade level.
+ * 
+ * @async
+ * @function retrieveGameWords
+ * @param {String} grade 
+ * @returns {Promise} On success a list of default words
+ * are returned, else an error is returned
+ */
+async function retrieveGameWords(grade) {
+	var words = []
+	return database
+		.ref("words/" + grade)
+		.once("value")
+		.then(function(snapshot) {
+			snapshot.forEach(function(wordSnapshot) {
+				words.push([wordSnapshot.val().word, wordSnapshot.val().hint])
+			});
+
+			return words;
+		})
+		.catch(function(error) {
+			return error;
+		});
+}
+
+/**
  * @description retrieve the account type of the signed in user
  * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT.
  *
