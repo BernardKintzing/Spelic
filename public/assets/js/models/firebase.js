@@ -171,6 +171,7 @@ auth.onAuthStateChanged(function(authUser) {
 					// Student account
 					currentUser = Object.assign({}, student);
 					currentUser.auth = authUser;
+					currentUserListener.triggerListener(true)
 				}
 			} else {
 				// Error retrieving snapshot
