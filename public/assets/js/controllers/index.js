@@ -1,25 +1,18 @@
 // If user is already signed in then they are
 // automatically redirected to the dashboard.
-authUser.registerListener(function(val) {
-	if (val != null) {
-		let promise = getUserAccountType();
-
-		promise.then(function(result) {
-			// Successfully retreived account type
-			if (result[0]) {
-				if (result[1] == ACCOUNT_TYPE_TEACHER) {
-					window.location.replace("teacher/home.html");
-				} else if (result[1] == ACCOUNT_TYPE_STUDENT) {
-					window.location.replace("studentHome.html");
-				} else {
-					alert("Unkown account type");
-				}
-			} else {
-				// TODO: better error handling
-				alert("Unable to retrieve account type");
-			}
-		});
+currentUserListener.registerListener(function(val) {
+	if (val) {
+		// User is signed in
+		if (currentUserIsTeacher()) {
+			window.location.replace("teacher/home.html");
+		} else if (currentUserIsStudent()) {
+			window.location.replace("student/home.html");
+		} else {
+			console.log("Unknown account type");
+		}
 	} else {
+		// User is not signed in
+
 		// Populate the HTML for home, this should only
 		// be done if the user is not signed in
 

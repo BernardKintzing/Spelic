@@ -42,30 +42,59 @@ exports.createStudentAccountFunction = functions.https.onCall(
 );
 
 /**
- * @description Retrieve the name of student given their uid.
- * Uses Firebase Authentication Admin functions.
+ * @description Retrieve the Firebase Authentication account
+ * of student given their uid. Uses Firebase Authentication 
+ * Admin functions.
  * @see admin.auth().getUser()
  * 
  * @async
- * @function retrieveStudentNamesFunction
- * @param {String} id the firebase auth id of the requested 
+ * @function retrieveStudentAuthFunction
+ * @param {String} uid the firebase auth id of the requested 
  * student
  * @returns {Promise} on success an array or length two is 
- * is returned in the format: [uid, displayName]. On error
- * the array is in format: ["nil", error]
+ * is returned in the format: [true, authAccount]. On error
+ * the array is in format: [false, error]
  */
-exports.retrieveStudentNamesFunction = functions.https.onCall(
+exports.retrieveStudentAuthFunction = functions.https.onCall(
 	(data, context) => {
 		return admin
 			.auth()
-			.getUser(data.id)
+			.getUser(data.uid)
 			.then(function(userRecord) {
-				console.log("Successfully retreived user:", userRecord.uid);
-				return [userRecord.uid, userRecord.displayName];
+				return [true, userRecord]
 			})
 			.catch(function(error) {
 				console.log("Error retrieving student name: ", error)
-				return ["nil", error];
+				return [false, error];
 			});
 	}
 );
+
+// /**
+//  * @description Retrieve the name of student given their uid.
+//  * Uses Firebase Authentication Admin functions.
+//  * @see admin.auth().getUser()
+//  * 
+//  * @async
+//  * @function retrieveStudentNamesFunction
+//  * @param {String} id the firebase auth id of the requested 
+//  * student
+//  * @returns {Promise} on success an array or length two is 
+//  * is returned in the format: [uid, displayName]. On error
+//  * the array is in format: ["nil", error]
+//  */
+// exports.retrieveStudentNamesFunction = functions.https.onCall(
+// 	(data, context) => {
+// 		return admin
+// 			.auth()
+// 			.getUser(data.id)
+// 			.then(function(userRecord) {
+// 				console.log("Successfully retreived user:", userRecord.uid);
+// 				return [userRecord.uid, userRecord.displayName];
+// 			})
+// 			.catch(function(error) {
+// 				console.log("Error retrieving student name: ", error)
+// 				return ["nil", error];
+// 			});
+// 	}
+// );

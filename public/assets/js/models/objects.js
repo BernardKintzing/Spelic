@@ -5,11 +5,13 @@
  * @param {firebase.auth().user} auth
  * @param {[student]} students
  * @param {[word]} words
+ * @param {ACCOUNT_TYPE_TEACHER} accountType
  */
 var teacher = {
-    auth: null,
+    auth: undefined,
     students: [],
-    words: []
+    words: undefined, 
+    accountType: ACCOUNT_TYPE_TEACHER
 }
 
 /**
@@ -17,9 +19,30 @@ var teacher = {
  * 
  * @var student
  * @param {firebase.auth().user} auth
+ * @param {ACCOUNT_TYPE_STUDENT} accountType
  */
 var student = {
-    auth: null
+    auth: undefined,
+    accountType: ACCOUNT_TYPE_STUDENT
+}
+
+/**
+ * @description object to hold all customWords
+ * @see customWord
+ * 
+ * @var customWords
+ * @param {[customWord]} FIRST_GRADE
+ * @param {[customWord]} SECOND_GRADE
+ * @param {[customWord]} THIRD_GRADE
+ * @param {[customWord]} FOURTH_GRADE
+ * @param {[customWord]} FIFTH_GRADE 
+ */
+var customWords = {
+    FIRST_GRADE: [],
+    SECOND_GRADE: [],
+    THIRD_GRADE: [],
+    FOURTH_GRADE: [],
+    FIFTH_GRADE: [],
 }
 
 /**
@@ -30,6 +53,19 @@ var student = {
  * @param {String} hint
  */
 var customWord = {
-    word: "",
-    hint: ""
+    word: undefined,
+    hint: undefined
+}
+
+/**
+ * @description required return from async functions
+ * 
+ * @var asyncReturn
+ * @param {Boolean} success
+ * @param {*} return either the return from the async
+ * call or the error 
+ */
+var asyncReturn = {
+    success: undefined,
+    return: undefined
 }

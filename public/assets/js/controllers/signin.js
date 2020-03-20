@@ -12,21 +12,13 @@ function signIn() {
 
 			// TODO: dynamically redirect user based on if 
 			// user account is teacher or student.
-			promise = getUserAccountType()
-
-			promise.then(function(result) {
-				if(result[0] == true) {
-					if(result[1] == ACCOUNT_TYPE_TEACHER) {
-						window.location.replace("teacher/home.html")
-					} else if(result[1] == ACCOUNT_TYPE_STUDENT) {
-						window.location.replace("studentHome.html")
-					} else {
-						alert("Unable to retrieve account type")
-					}
-				} else {
-					alert(result[1])
-				}
-			})
+			if(currentUserIsTeacher()) {
+				window.location.replace("teacher/home.html")
+			} else if(currentUserIsStudent()) {
+				window.location.replace("student/home.html")
+			} else {
+				console.log("Unkown user account type")
+			}
         } else {
             // Error attempting to sign in user
             errorMessage.innerHTML = result

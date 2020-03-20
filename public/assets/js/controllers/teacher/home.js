@@ -1,12 +1,12 @@
-let titleHeader = document.getElementById("title-header");
+var titleHeader = document.getElementById("title-header");
 
-let wordInputField = document.getElementById("new-word");
-let sort = document.getElementById("sort");
-let firstGradeSelect = document.getElementById("first-grade");
-let secondGradeSelect = document.getElementById("second-grade");
-let thirdGradeSelect = document.getElementById("third-grade");
-let fourthGradeSelect = document.getElementById("fourth-grade");
-let fifthGradeSelect = document.getElementById("fifth-grade");
+var wordInputField = document.getElementById("new-word");
+var sort = document.getElementById("sort");
+var firstGradeSelect = document.getElementById("first-grade");
+var secondGradeSelect = document.getElementById("second-grade");
+var thirdGradeSelect = document.getElementById("third-grade");
+var fourthGradeSelect = document.getElementById("fourth-grade");
+var fifthGradeSelect = document.getElementById("fifth-grade");
 
 firstGradeSelect.value = FIRST_GRADE;
 secondGradeSelect.value = SECOND_GRADE;
@@ -14,7 +14,10 @@ thirdGradeSelect.value = THIRD_GRADE;
 fourthGradeSelect.value = FOURTH_GRADE;
 fifthGradeSelect.value = FIFTH_GRADE;
 
-let username = document.getElementById("name");
+var username = document.getElementById("name");
+
+var studentsList = document.getElementById("students-list");
+let wordsList = document.getElementById("custom-words");
 
 var studentName = document.getElementById("student-name");
 var studentPassword = document.getElementById("student-password");
@@ -24,96 +27,64 @@ var studentConfirmPassword = document.getElementById(
 
 /**
  * @description listen to updates on the user status. If the
- * user is signed in we update their name across the dashboard.
+ * user is signed in we update the ui of home page.
  */
-authUser.registerListener(function(val) {
-	if (val != null) {
-		if (val.displayName != null) {
-			username.value = val.displayName;
-			titleHeader.innerHTML = "Welcome " + val.displayName;
-		} else {
-			username.value = null;
-		}
+currentUserListener.registerListener(function(val) {
+	if (val) {
+		// User is signed in
+		if (currentUserIsTeacher()) {
+			// Update display name
+			var displayName = currentUser.auth.displayName;
+			if (displayName) {
+				username.value = displayName;
+				titleHeader.innerHTML = "Welcome " + displayName;
+			} else {
+				username.value = null;
+			}
 
-		populateStudents();
-		populateWords();
+			// Update students
+			studentsList.innerHTML = "";
+			currentUser.students.forEach(function(student) {
+				studentsList.innerHTML += "<li>" + student.auth.displayName + ", (" + student.auth.uid + ")</li>";
+			});
+
+			//Update custom words
+			wordsList.innerHTML = "";
+
+			wordsList.innerHTML += "<h3>First Grade</h3>";
+			currentUser.words.FIRST_GRADE.forEach(function(word) {
+				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
+			})
+
+			wordsList.innerHTML += "<h3>Second Grade</h3>";
+			currentUser.words.SECOND_GRADE.forEach(function(word) {
+				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
+			})
+
+			wordsList.innerHTML += "<h3>Third Grade</h3>";
+			currentUser.words.THIRD_GRADE.forEach(function(word) {
+				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
+			})
+
+			wordsList.innerHTML += "<h3>Fourth Grade</h3>";
+			currentUser.words.FOURTH_GRADE.forEach(function(word) {
+				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
+			})
+
+			wordsList.innerHTML += "<h3>Fifth Grade</h3>";
+			currentUser.words.FIFTH_GRADE.forEach(function(word) {
+				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
+			})
+		} else if (currentUserIsStudent) {
+			window.location.replace("student/home.html");
+		} else {
+			console.log("Unknown user account type.");
+		}
+	} else {
+		// User is not signed in
+		window.location.replace("/");
 	}
 });
-
-/**
- * @description Populate a ul with the name and id's of all
- * the students registered under a teacher.
- * @see retrieveStudents
- *
- * @function populateStudents
- *
- * @todo check data flow for unhandled errors
- */
-function populateStudents() {
-	let studentsList = document.getElementById("students-list");
-	studentsList.innerHTML = "";
-
-	var promise = retrieveStudents();
-	promise.then(function(result) {
-		if (result[0] == true) {
-			for (i = 0; i < result[1].length; i++) {
-				studentsList.innerHTML +=
-					"<li>" +
-					result[1][i].data[1].charAt(0).toUpperCase() +
-					result[1][i].data[1].slice(1) +
-					", (" +
-					result[1][i].data[0] +
-					")</li>";
-			}
-		} else {
-			alert[result[1]];
-		}
-	});
-}
-
-/**
- * @description Populate ul with a list of all custom words
- * the teacher has created.
- * @see retrieveWords
- *
- * @function populateWords
- *
- * @todo check data flow for unhandled errors
- */
-function populateWords() {
-	let wordsList = document.getElementById("custom-words");
-	wordsList.innerHTML = "";
-
-	var promise = retrieveWords();
-	promise.then(function(result) {
-		result.forEach(function(gradeSnapshot) {
-			let grade = parseInt(gradeSnapshot.key);
-			switch (grade) {
-				case FIRST_GRADE:
-					wordsList.innerHTML += "<h3>First Grade</h3>";
-					break;
-				case SECOND_GRADE:
-					wordsList.innerHTML += "<h3>Second Grade</h3>";
-					break;
-				case THIRD_GRADE:
-					wordsList.innerHTML += "<h3>Third Grade</h3>";
-					break;
-				case FOURTH_GRADE:
-					wordsList.innerHTML += "<h3>Fourth Grade</h3>";
-					break;
-				case FIFTH_GRADE:
-					wordsList.innerHTML += "<h3>Fifth Grade</h3>";
-					break;
-			}
-
-			gradeSnapshot.forEach(function(wordSnapshot) {
-				// console.log(wordSnapshot.val())
-				wordsList.innerHTML +=
-					"<li>" + wordSnapshot.val().word + "</li>";
-			});
-		});
-	});
-}
 
 /**
  * @description Update the display name of the current user.
@@ -143,7 +114,7 @@ function updateName() {
  * @function updatePassword
  */
 function updatePassword() {
-	var email = authUser.data.email;
+	var email = currentUser.auth.email;
 
 	if (email != null) {
 		var promise = sendPasswordResetEmail(email);
