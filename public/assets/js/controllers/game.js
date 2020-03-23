@@ -1,3 +1,4 @@
+// Load background
 particlesJS.load(
 	"particles-js",
 	"/assets/js/particles/particles.json",
@@ -14,6 +15,7 @@ let gameWords = [];
 var promise = retrieveGameWords(FIRST_GRADE);
 promise.then(function(result) {
 	gameWords = result;
+	console.log(result)
 });
 
 // function move() {

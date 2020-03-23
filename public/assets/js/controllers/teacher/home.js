@@ -76,7 +76,7 @@ currentUserListener.registerListener(function(val) {
 				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
 			})
 		} else if (currentUserIsStudent) {
-			window.location.replace("student/home.html");
+			// window.location.replace("student/home.html");
 		} else {
 			console.log("Unknown user account type.");
 		}
