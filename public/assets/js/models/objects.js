@@ -48,11 +48,11 @@ var customWords = {
 /**
  * @description object to hold a word and its hint
  * 
- * @var customWord
+ * @var word
  * @param {String} word
  * @param {String} hint
  */
-var customWord = {
+var word = {
     word: undefined,
     hint: undefined
 }

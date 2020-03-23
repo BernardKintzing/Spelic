@@ -4368,9 +4368,9 @@
 		background-size: contain;
 		background-repeat: no-repeat;
 		position: absolute;
-		left: 50%;
+		left: -20rem;
 		top: 50%;
-		transform: translate(-50%, -50%);
+		transform: translateY(-50%);
 		height: 10rem;
 		/* height: auto; */
 		width: 20rem;

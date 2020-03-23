@@ -30,10 +30,10 @@ var currentUserListener = {
 	registerListener: function(listener) {
 		this.aListener = listener;
 	},
-	triggerListener: function(val){
+	triggerListener: function(val) {
 		this.aListener(val);
 	}
-}
+};
 
 //-------------- VARIABLE GETTERS & SETTERS --------------//
 
@@ -114,9 +114,9 @@ auth.onAuthStateChanged(function(authUser) {
 							}
 						});
 
-						tasks--
-						if(!tasks) {
-							currentUserListener.triggerListener(true)
+						tasks--;
+						if (!tasks) {
+							currentUserListener.triggerListener(true);
 						}
 					});
 
@@ -127,41 +127,51 @@ auth.onAuthStateChanged(function(authUser) {
 					customWordsPromise.then(function(result) {
 						if (result.success) {
 							// Custom words successfully retrieved
-							
-							currentUser.words = customWords
+
+							currentUser.words = customWords;
 							result.return.forEach(function(gradeSnapshot) {
 								var grade = parseInt(gradeSnapshot.key);
 								gradeSnapshot.forEach(function(wordSnapshot) {
-									var newWord = Object.assign({}, customWord);
+									var newWord = Object.assign({}, word);
 									newWord.word = wordSnapshot.val().word;
 									newWord.hint = wordSnapshot.val().hint;
 
 									switch (grade) {
 										case FIRST_GRADE:
-											currentUser.words.FIRST_GRADE.push(newWord);
+											currentUser.words.FIRST_GRADE.push(
+												newWord
+											);
 											break;
 										case SECOND_GRADE:
-											currentUser.words.SECOND_GRADE.push(newWord);
+											currentUser.words.SECOND_GRADE.push(
+												newWord
+											);
 											break;
 										case THIRD_GRADE:
-											currentUser.words.THIRD_GRADE.push(newWord);
+											currentUser.words.THIRD_GRADE.push(
+												newWord
+											);
 											break;
 										case FOURTH_GRADE:
-											currentUser.words.FOURTH_GRADE.push(newWord);
+											currentUser.words.FOURTH_GRADE.push(
+												newWord
+											);
 											break;
 										case FIFTH_GRADE:
-											currentUser.words.FIFTH_GRADE.push(newWord);
+											currentUser.words.FIFTH_GRADE.push(
+												newWord
+											);
 											break;
 									}
 								});
 							});
 						} else {
-							console.log("Error retrieving custom words.")
+							console.log("Error retrieving custom words.");
 						}
 
-						tasks--
-						if(!tasks) {
-							currentUserListener.triggerListener(true)
+						tasks--;
+						if (!tasks) {
+							currentUserListener.triggerListener(true);
 						}
 					});
 				} else if (
@@ -171,17 +181,17 @@ auth.onAuthStateChanged(function(authUser) {
 					// Student account
 					currentUser = Object.assign({}, student);
 					currentUser.auth = authUser;
-					currentUserListener.triggerListener(true)
+					currentUserListener.triggerListener(true);
 				}
 			} else {
 				// Error retrieving snapshot
-				console.log("Error retriving user snapshot.")
+				console.log("Error retriving user snapshot.");
 			}
 		});
 	} else {
 		// User signed out
 		currentUser = undefined;
-		currentUserListener.triggerListener(false)
+		currentUserListener.triggerListener(false);
 	}
 });
 
@@ -455,23 +465,33 @@ async function addStudentToTeacher(uid) {
  * @async
  * @function retrieveGameWords
  * @param {String} grade
- * @returns {Promise} On success a list of default words
- * are returned, else an error is returned
+ * @returns {Promise} On success an async object containing
+ * an array of words for the requested grade, else the error
+ * is returned
  */
 async function retrieveGameWords(grade) {
+	var result = Object.assign({}, asyncReturn);
 	var words = [];
 	return database
 		.ref("words/" + grade)
 		.once("value")
 		.then(function(snapshot) {
 			snapshot.forEach(function(wordSnapshot) {
-				words.push([wordSnapshot.val().word, wordSnapshot.val().hint]);
+				var newWord = Object.assign({}, word);
+				newWord.word = wordSnapshot.val().word;
+				newWord.hint = wordSnapshot.val().hint;
+				words.push(newWord);
 			});
 
-			return words;
+			result.success = true;
+			result.return = words;
+			return result;
 		})
 		.catch(function(error) {
-			return error;
+			result.success = false;
+			result.return = error;
+
+			return result;
 		});
 }
 

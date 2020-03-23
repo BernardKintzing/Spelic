@@ -10,18 +10,19 @@
 <body style="overflow: hidden;">
 
     <div id="particles-js"></div>
-    <div id="earth"></div>
-    <div id="buttons">
-        <input id="" type="submit" value="A" class="special">
-        <input id="" type="submit" value="E" class="special">
-        <input id="" type="submit" value="I" class="special">
-        <input id="" type="submit" value="O" class="special">
-        <input id="" type="submit" value="U" class="special">
-    </div>
 
-    
-    <div id="asteroid" onclick="move()">
-        <h1></h1>
+    <div id="play-pause" class="icon fa-play" style="position: absolute; left: 1rem; top: 0; font-size: 2em;" onclick="togglePlay()"></div>
+
+    <div id="earth"></div>
+
+    <div id="asteroid"><h1></h1></div>
+
+    <div id="buttons">
+        <input id="" type="submit" value="A" class="special" onclick="submitVowel('a')">
+        <input id="" type="submit" value="E" class="special" onclick="submitVowel('e')">
+        <input id="" type="submit" value="I" class="special" onclick="submitVowel('i')">
+        <input id="" type="submit" value="O" class="special" onclick="submitVowel('o')">
+        <input id="" type="submit" value="U" class="special" onclick="submitVowel('u')">
     </div>
 
     <!-- Firebase Scripts -->
