@@ -9,16 +9,7 @@ function signIn() {
 
         if (result.user != null) {
 			// User is successfully logged in
-
-			// TODO: dynamically redirect user based on if 
-			// user account is teacher or student.
-			if(currentUserIsTeacher()) {
-				window.location.replace("teacher/home.html")
-			} else if(currentUserIsStudent()) {
-				window.location.replace("student/home.html")
-			} else {
-				console.log("Unkown user account type")
-			}
+			
         } else {
             // Error attempting to sign in user
             errorMessage.innerHTML = result
@@ -36,3 +27,19 @@ function forgotPassword() {
 		errorMessage.innerHTML = result
 	})
 }
+
+// Once the user is signed in the currentUserListener 
+// is triggered and we can redirect the user
+currentUserListener.registerListener(function(val) {
+	if (val) {
+		if(currentUserIsTeacher()) {
+			window.location.replace("teacher/home.html")
+		} else if(currentUserIsStudent()) {
+			window.location.replace("student/home.html")
+		} else {
+			console.log("Unkown user account type")
+		}
+	} else {
+		console.log("Could not sign user in")
+	}
+});
