@@ -4357,7 +4357,7 @@
 		background-repeat: no-repeat;
 		position: absolute;
 		right: -30vh;
-		top: 20vh;
+		top: 20vh; 
 		height: 60vh;
 		width: 60vh;
 		z-index: 10000;
@@ -4368,12 +4368,11 @@
 		background-size: contain;
 		background-repeat: no-repeat;
 		position: absolute;
-		left: -20rem;
+		/* left: -20rem; */
 		top: 50%;
 		transform: translateY(-50%);
-		height: 10rem;
-		/* height: auto; */
-		width: 20rem;
+		/* height: 10rem; */
+		/* width: 20rem; */
 		z-index: 10000;
 	}
 
