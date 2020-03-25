@@ -4385,6 +4385,18 @@
 		transform: translateX(-50%);
 	}
 
+	#lives {
+		color: red;
+		position: absolute;
+		top: 1rem;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+		#lives * {
+			padding: 0 .5rem;
+			display: inline-block;
+		}
+
 	#earth {
 		background-image: url("../images/earth.png");
 		background-size: contain;
@@ -4402,11 +4414,8 @@
 		background-size: contain;
 		background-repeat: no-repeat;
 		position: absolute;
-		/* left: -20rem; */
 		top: 50%;
 		transform: translateY(-50%);
-		/* height: 10rem; */
-		/* width: 20rem; */
 		z-index: 10000;
 	}
 
