@@ -4384,6 +4384,10 @@
 		left: 50%;
 		transform: translateX(-50%);
 	}
+		#buttons #hint {
+			text-align: center;
+			color: var(--white);
+		}
 
 	#lives {
 		color: red;

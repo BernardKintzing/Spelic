@@ -8,6 +8,7 @@ const EARTH_DIAMETER =
 var earth = document.getElementById("earth");
 var asteroid = document.getElementById("asteroid");
 var asteroidWord = asteroid.children[0];
+var hint = document.getElementById("hint");
 var playToggle = document.getElementById("play-pause");
 
 // Game settings
@@ -50,6 +51,7 @@ function play() {
     alert("You win");
   } else if (lives == 0) {
     alert("You lose");
+    isPlaying = false;
   } else {
     sendAsteroid();
   }
@@ -60,6 +62,7 @@ function sendAsteroid() {
   var testWord = gameWords.splice(ran, 1)[0];
   testWord.word = removeVowel(testWord.word);
   asteroidWord.innerHTML = testWord.word;
+  hint.innerHTML = testWord.hint;
 
   motionInterval = setInterval(function() {
     if (isPlaying) {
@@ -68,12 +71,12 @@ function sendAsteroid() {
       var asteroidRect = asteroid.getBoundingClientRect();
       var earthRect = earth.getBoundingClientRect();
       if (asteroidRect.right > earthRect.left) {
-		var heart = document.getElementById("life" + lives);
+        var heart = document.getElementById("life" + lives);
         heart.style.color = "gray";
         lives--;
         asteroid.style.left = -ASTEROID_WIDTH;
         currentPos = -ASTEROID_WIDTH;
-        play();
+        // play();
       }
     }
   }, 20);
