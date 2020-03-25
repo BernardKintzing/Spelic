@@ -17,7 +17,8 @@
             <ul>
                 <li>
                     <!-- TODO: Put styling in css file -->
-                    <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')" class="icon fa-user"></a>
+                    <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')"
+                        class="icon fa-user"></a>
                 </li>
             </ul>
         </nav>
@@ -25,17 +26,28 @@
 
     <section class="wrapper">
         <div class="inner">
+            <div class="tabs-wrapper">
+                <div class="headers">
+                    <h2 onclick="switchTab('students-content')">Students</h2>
+                    <h2 onclick="switchTab('custom-words-content')">Custom Words</h2>
+                    <h2 onclick="switchTab('game-content')">Game</h2>
+                </div>
+                <div class="tabs">
+                    <div id="students-content" class="tab">
+                        <ul id="students-list"></ul>
+                        <input id="" type="button" value="Create Student" onclick="displayModal('createStudent')" />
+                    </div>
 
-            <h2>Students</h2>
-            <ul id="students-list"></ul>
-            <input id="" type="button" value="Create Student" onclick="displayModal('createStudent')" />
+                    <div id="custom-words-content" class="tab">
+                        <ul id="custom-words"></ul>
+                        <input id="" type="button" value="Add Word" onclick="displayModal('editWords')" />
+                    </div>
 
-            <h2>Custom Words</h2>
-            <ul id="custom-words"></ul>
-            <input id="" type="button" value="Add Word" onclick="displayModal('editWords')" />
-
-            <h2>Game</h2>
-            <a class="button" href="../game.html">Test Game</a>
+                    <div id="game-content" class="tab">
+                        <a class="button" href="../game.html">Test Game</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -131,6 +143,7 @@
     <script src="../assets/js/ui/skel.min.js"></script>
     <script src="../assets/js/ui/util.js"></script>
     <script src="../assets/js/ui/main.js"></script>
+    <script src="../assets/js/ui/tabs.js"></script>
 </body>
 
 </html>

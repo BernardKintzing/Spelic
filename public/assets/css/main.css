@@ -1556,7 +1556,6 @@
 
 	h2 {
 		font-size: 3.5rem;
-		font-style: italic;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 	}
@@ -4188,6 +4187,41 @@
 			}
 
 		}
+/* Tabs */
+
+	.tabs-wrapper .headers {
+		text-align: center;
+	}
+
+	.tabs-wrapper .headers:before{
+		content: ''; /* position for block element*/
+		display: block; /* the block part for the last item*/
+		width: 100%;
+	}
+
+	.tabs-wrapper .headers:after {
+		content: '';
+		display: inline-block; /* inline-block for the first (and middle elements) */
+		width: 100%;
+	}
+
+	.tabs-wrapper .headers h2 {
+		display: inline-block;
+		padding: 0 2em;
+	}
+
+		.tabs-wrapper .headers h2:hover {
+			cursor: pointer;
+			color: var(--light-gray);
+		}
+
+	.tabs-wrapper .tabs .tab {
+		display: none;
+	}
+
+	.tabs-wrapper .tabs :first-child {
+		display: inherit;
+	}
 
 /* Footer */
 
