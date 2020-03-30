@@ -22,7 +22,7 @@ let wordsList = document.getElementById("custom-words");
 var studentName = document.getElementById("student-name");
 var studentPassword = document.getElementById("student-password");
 var studentConfirmPassword = document.getElementById(
-	"student-confirm-password"
+  "student-confirm-password"
 );
 
 /**
@@ -30,60 +30,57 @@ var studentConfirmPassword = document.getElementById(
  * user is signed in we update the ui of home page.
  */
 currentUserListener.registerListener(function(val) {
-	if (val) {
-		// User is signed in
-		if (currentUserIsTeacher()) {
-			// Update display name
-			var displayName = currentUser.auth.displayName;
-			if (displayName) {
-				username.value = displayName;
-				titleHeader.innerHTML = "Welcome " + displayName;
-			} else {
-				username.value = null;
-			}
+  if (val) {
+    // User is signed in
+    if (currentUserIsTeacher()) {
+      // Update display name
+      var displayName = currentUser.auth.displayName;
+      if (displayName) {
+        username.value = displayName;
+        titleHeader.innerHTML = "Welcome " + displayName;
+      } else {
+        username.value = null;
+      }
 
-			// Update students
-			studentsList.innerHTML = "";
-			currentUser.students.forEach(function(student) {
-				studentsList.innerHTML += "<li>" + student.auth.displayName + ", (" + student.auth.uid + ")</li>";
-			});
+      // Update students
+      updateStudentsUI();
 
-			//Update custom words
-			wordsList.innerHTML = "";
+      //Update custom words
+      wordsList.innerHTML = "";
 
-			wordsList.innerHTML += "<h3>First Grade</h3>";
-			currentUser.words.FIRST_GRADE.forEach(function(word) {
-				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
-			})
+      wordsList.innerHTML += "<h3>First Grade</h3>";
+      currentUser.words.FIRST_GRADE.forEach(function(word) {
+        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
+      });
 
-			wordsList.innerHTML += "<h3>Second Grade</h3>";
-			currentUser.words.SECOND_GRADE.forEach(function(word) {
-				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
-			})
+      wordsList.innerHTML += "<h3>Second Grade</h3>";
+      currentUser.words.SECOND_GRADE.forEach(function(word) {
+        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
+      });
 
-			wordsList.innerHTML += "<h3>Third Grade</h3>";
-			currentUser.words.THIRD_GRADE.forEach(function(word) {
-				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
-			})
+      wordsList.innerHTML += "<h3>Third Grade</h3>";
+      currentUser.words.THIRD_GRADE.forEach(function(word) {
+        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
+      });
 
-			wordsList.innerHTML += "<h3>Fourth Grade</h3>";
-			currentUser.words.FOURTH_GRADE.forEach(function(word) {
-				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
-			})
+      wordsList.innerHTML += "<h3>Fourth Grade</h3>";
+      currentUser.words.FOURTH_GRADE.forEach(function(word) {
+        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
+      });
 
-			wordsList.innerHTML += "<h3>Fifth Grade</h3>";
-			currentUser.words.FIFTH_GRADE.forEach(function(word) {
-				wordsList.innerHTML += "<li>" + word.word + ", " + word.hint +"</li>";
-			})
-		} else if (currentUserIsStudent) {
-			// window.location.replace("student/home.html");
-		} else {
-			console.log("Unknown user account type.");
-		}
-	} else {
-		// User is not signed in
-		window.location.replace("/");
-	}
+      wordsList.innerHTML += "<h3>Fifth Grade</h3>";
+      currentUser.words.FIFTH_GRADE.forEach(function(word) {
+        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
+      });
+    } else if (currentUserIsStudent) {
+      // window.location.replace("student/home.html");
+    } else {
+      console.log("Unknown user account type.");
+    }
+  } else {
+    // User is not signed in
+    window.location.replace("/");
+  }
 });
 
 /**
@@ -93,16 +90,39 @@ currentUserListener.registerListener(function(val) {
  * @function updateName
  */
 function updateName() {
-	promise = updateUserDisplayName(username.value);
+  promise = updateUserDisplayName(username.value);
 
-	promise.then(function(result) {
-		if (result == true) {
-			titleHeader.innerHTML = "Welcome " + username.value;
-			alert("Name successfully updated");
-		} else {
-			alert(result);
-		}
-	});
+  promise.then(function(result) {
+    if (result == true) {
+      titleHeader.innerHTML = "Welcome " + username.value;
+      alert("Name successfully updated");
+    } else {
+      alert(result);
+    }
+  });
+}
+
+function updateStudentsUI() {
+  studentsList.innerHTML = `
+		<input
+			id=""
+			type="button"
+			value="Create Student"
+			onclick="displayModal('createStudent')"
+		/>
+	`;
+  currentUser.students.forEach(function(student) {
+    // studentsList.innerHTML += "<li>" + student.auth.displayName + ", (" + student.auth.uid + ")</li>";
+    studentsList.innerHTML +=
+      `
+			<div class="list-content">
+				<h2>` +
+      student.auth.displayName +
+      `</h2>
+				<button onclick="displayModal('editStudent')">Edit</button>
+			</div>
+		`;
+  });
 }
 
 /**
@@ -114,17 +134,17 @@ function updateName() {
  * @function updatePassword
  */
 function updatePassword() {
-	var email = currentUser.auth.email;
+  var email = currentUser.auth.email;
 
-	if (email != null) {
-		var promise = sendPasswordResetEmail(email);
+  if (email != null) {
+    var promise = sendPasswordResetEmail(email);
 
-		promise.then(function(result) {
-			alert("Password reset email sent to: " + email);
-		});
-	} else {
-		alert("No email found");
-	}
+    promise.then(function(result) {
+      alert("Password reset email sent to: " + email);
+    });
+  } else {
+    alert("No email found");
+  }
 }
 
 /**
@@ -135,15 +155,15 @@ function updatePassword() {
  * @function signOut
  */
 function signOut() {
-	var promise = signOutFirebaseUser();
+  var promise = signOutFirebaseUser();
 
-	promise.then(function(result) {
-		if ((result = true)) {
-			window.location.replace("/");
-		} else {
-			alert(result);
-		}
-	});
+  promise.then(function(result) {
+    if ((result = true)) {
+      window.location.replace("/");
+    } else {
+      alert(result);
+    }
+  });
 }
 
 /**
@@ -157,15 +177,15 @@ function signOut() {
  * @todo update ui with new student
  */
 function addStudentAccount() {
-	var name = studentName.value;
-	var password = studentPassword.value;
-	var confirmPassword = studentConfirmPassword.value;
+  var name = studentName.value;
+  var password = studentPassword.value;
+  var confirmPassword = studentConfirmPassword.value;
 
-	if (password == confirmPassword) {
-		createStudentAccount(name, password);
-	} else {
-		alert("Passwords do not match");
-	}
+  if (password == confirmPassword) {
+    createStudentAccount(name, password);
+  } else {
+    alert("Passwords do not match");
+  }
 }
 
 /**
@@ -179,18 +199,18 @@ function addStudentAccount() {
  * @todo update ui with new word
  */
 function addWord() {
-	var newWord = wordInputField.value;
-	var grade = sort.options[sort.selectedIndex].value;
+  var newWord = wordInputField.value;
+  var grade = sort.options[sort.selectedIndex].value;
 
-	var promise = addWordToDatabase(newWord, grade);
+  var promise = addWordToDatabase(newWord, grade);
 
-	promise.then(function(result) {
-		if (result == true) {
-			alert("Word successfully added");
-		} else {
-			alert(result);
-		}
-	});
+  promise.then(function(result) {
+    if (result == true) {
+      alert("Word successfully added");
+    } else {
+      alert(result);
+    }
+  });
 }
 
 /**
@@ -202,8 +222,8 @@ function addWord() {
  * @todo prevent one model from opening if another is open
  */
 function displayModal(modalName) {
-	let modal = document.getElementById(modalName);
-	modal.style.display = "block";
+  let modal = document.getElementById(modalName);
+  modal.style.display = "block";
 }
 
 /**
@@ -213,6 +233,6 @@ function displayModal(modalName) {
  * @param {String} modalName Id of the modal being hidden
  */
 function closeModal(modalName) {
-	let modal = document.getElementById(modalName);
-	modal.style.display = "none";
+  let modal = document.getElementById(modalName);
+  modal.style.display = "none";
 }

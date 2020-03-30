@@ -44,13 +44,9 @@
           </div>
           <div class="tabs">
             <div id="students-content" class="tab">
-              <ul id="students-list"></ul>
-              <input
-                id=""
-                type="button"
-                value="Create Student"
-                onclick="displayModal('createStudent')"
-              />
+              <ul id="students-list">
+                <div class="loader"></div>
+              </ul>
             </div>
 
             <div id="custom-words-content" class="tab">
@@ -147,6 +143,12 @@
             </div>
           </div>
         </section>
+      </div>
+    </div>
+
+    <div class="modal" id="editStudent">
+      <div class="content">
+        <span class="close" onclick="closeModal('editStudent')">&times;</span>
       </div>
     </div>
 
