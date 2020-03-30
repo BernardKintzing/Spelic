@@ -46,32 +46,7 @@ currentUserListener.registerListener(function(val) {
       updateStudentsUI();
 
       //Update custom words
-      wordsList.innerHTML = "";
-
-      wordsList.innerHTML += "<h3>First Grade</h3>";
-      currentUser.words.FIRST_GRADE.forEach(function(word) {
-        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
-      });
-
-      wordsList.innerHTML += "<h3>Second Grade</h3>";
-      currentUser.words.SECOND_GRADE.forEach(function(word) {
-        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
-      });
-
-      wordsList.innerHTML += "<h3>Third Grade</h3>";
-      currentUser.words.THIRD_GRADE.forEach(function(word) {
-        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
-      });
-
-      wordsList.innerHTML += "<h3>Fourth Grade</h3>";
-      currentUser.words.FOURTH_GRADE.forEach(function(word) {
-        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
-      });
-
-      wordsList.innerHTML += "<h3>Fifth Grade</h3>";
-      currentUser.words.FIFTH_GRADE.forEach(function(word) {
-        wordsList.innerHTML += "<li>" + word.word + ", " + word.hint + "</li>";
-      });
+      updateCustomWordsUI();
     } else if (currentUserIsStudent) {
       // window.location.replace("student/home.html");
     } else {
@@ -102,6 +77,11 @@ function updateName() {
   });
 }
 
+/**
+ * @description Update the UI of the students tab
+ *
+ * @function updateStudentsUI
+ */
 function updateStudentsUI() {
   studentsList.innerHTML = `
 		<input
@@ -122,6 +102,86 @@ function updateStudentsUI() {
 				<button onclick="displayModal('editStudent')">Edit</button>
 			</div>
 		`;
+  });
+}
+
+/**
+ * @description Update the UI of the custom words tab
+ *
+ * @function updateStudentsUI
+ */
+function updateCustomWordsUI() {
+  wordsList.innerHTML = `
+	<input
+	  id=""
+	  type="button"
+	  value="Add Word"
+	  onclick="displayModal('addWord')"
+	/>`;
+
+  wordsList.innerHTML += "<h3>First Grade</h3>";
+  currentUser.words.FIRST_GRADE.forEach(function(word) {
+    wordsList.innerHTML +=
+      `
+			  <div class="list-content">
+				  <h2>` +
+      word.word +
+      `</h2>
+				  <button onclick="displayModal('editWord')">Edit</button>
+			  </div>
+		  `;
+  });
+
+  wordsList.innerHTML += "<h3>Second Grade</h3>";
+  currentUser.words.SECOND_GRADE.forEach(function(word) {
+    wordsList.innerHTML +=
+      `
+			  <div class="list-content">
+				  <h2>` +
+      word.word +
+      `</h2>
+				  <button onclick="displayModal('editWord')">Edit</button>
+			  </div>
+		  `;
+  });
+
+  wordsList.innerHTML += "<h3>Third Grade</h3>";
+  currentUser.words.THIRD_GRADE.forEach(function(word) {
+    wordsList.innerHTML +=
+      `
+			  <div class="list-content">
+				  <h2>` +
+      word.word +
+      `</h2>
+				  <button onclick="displayModal('editWord')">Edit</button>
+			  </div>
+		  `;
+  });
+
+  wordsList.innerHTML += "<h3>Fourth Grade</h3>";
+  currentUser.words.FOURTH_GRADE.forEach(function(word) {
+    wordsList.innerHTML +=
+      `
+			  <div class="list-content">
+				  <h2>` +
+      word.word +
+      `</h2>
+				  <button onclick="displayModal('editWord')">Edit</button>
+			  </div>
+		  `;
+  });
+
+  wordsList.innerHTML += "<h3>Fifth Grade</h3>";
+  currentUser.words.FIFTH_GRADE.forEach(function(word) {
+    wordsList.innerHTML +=
+      `
+			  <div class="list-content">
+				  <h2>` +
+      word.word +
+      `</h2>
+				  <button onclick="displayModal('editWord')">Edit</button>
+			  </div>
+		  `;
   });
 }
 

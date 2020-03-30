@@ -51,12 +51,6 @@
 
             <div id="custom-words-content" class="tab">
               <ul id="custom-words"></ul>
-              <input
-                id=""
-                type="button"
-                value="Add Word"
-                onclick="displayModal('editWords')"
-              />
             </div>
 
             <div id="game-content" class="tab">
@@ -149,12 +143,13 @@
     <div class="modal" id="editStudent">
       <div class="content">
         <span class="close" onclick="closeModal('editStudent')">&times;</span>
+        <h1>TODO: Edit Student</h1>
       </div>
     </div>
 
-    <div class="modal" id="editWords">
+    <div class="modal" id="addWord">
       <div class="content">
-        <span class="close" onclick="closeModal('editWords')">&times;</span>
+        <span class="close" onclick="closeModal('addWord')">&times;</span>
         <section class="wrapper">
           <div class="inner">
             <div class="form">
@@ -191,6 +186,13 @@
         </section>
       </div>
     </div>
+
+    <div class="modal" id="editWord">
+        <div class="content">
+          <span class="close" onclick="closeModal('editWord')">&times;</span>
+          <h1>TODO: Edit Word</h1>
+        </div>
+      </div>
 
     <!-- Scripts -->
     <script src="/__/firebase/7.8.0/firebase-app.js"></script>
