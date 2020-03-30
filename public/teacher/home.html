@@ -1,128 +1,193 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Teacher Menu Page</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
+    <link rel="stylesheet" type="text/css" href="../assets/css/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+  </head>
 
-<body>
-
+  <body>
     <header id="header">
-        <a class="logo" id="title-header">Spelic</a>
-        <nav>
-            <ul>
-                <li>
-                    <!-- TODO: Put styling in css file -->
-                    <a style="position: absolute; right: 0; top: 0; font-size: 2em;" onclick="displayModal('profile')"
-                        class="icon fa-user"></a>
-                </li>
-            </ul>
-        </nav>
+      <a class="logo" id="title-header">Spelic</a>
+      <nav>
+        <ul>
+          <li>
+            <!-- TODO: Put styling in css file -->
+            <a
+              style="position: absolute; right: 0; top: 0; font-size: 2em;"
+              onclick="displayModal('profile')"
+              class="icon fa-user"
+            ></a>
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <section class="wrapper">
-        <div class="inner">
-            <div class="tabs-wrapper">
-                <div class="headers">
-                    <h2 onclick="switchTab('students-content')">Students</h2>
-                    <h2 onclick="switchTab('custom-words-content')">Custom Words</h2>
-                    <h2 onclick="switchTab('game-content')">Game</h2>
-                </div>
-                <div class="tabs">
-                    <div id="students-content" class="tab">
-                        <ul id="students-list"></ul>
-                        <input id="" type="button" value="Create Student" onclick="displayModal('createStudent')" />
-                    </div>
-
-                    <div id="custom-words-content" class="tab">
-                        <ul id="custom-words"></ul>
-                        <input id="" type="button" value="Add Word" onclick="displayModal('editWords')" />
-                    </div>
-
-                    <div id="game-content" class="tab">
-                        <a class="button" href="../game.html">Test Game</a>
-                    </div>
-                </div>
+      <div class="inner">
+        <div class="tabs-wrapper">
+          <div class="headers">
+            <h2 onclick="switchTab('students-content', this)">
+              <span class="underline-large active">Students</span>
+            </h2>
+            <h2 onclick="switchTab('custom-words-content', this)">
+              <span class="underline-large">Custom Words</span>
+            </h2>
+            <h2 onclick="switchTab('game-content', this)">
+              <span class="underline-large">Game</span>
+            </h2>
+          </div>
+          <div class="tabs">
+            <div id="students-content" class="tab">
+              <ul id="students-list"></ul>
+              <input
+                id=""
+                type="button"
+                value="Create Student"
+                onclick="displayModal('createStudent')"
+              />
             </div>
+
+            <div id="custom-words-content" class="tab">
+              <ul id="custom-words"></ul>
+              <input
+                id=""
+                type="button"
+                value="Add Word"
+                onclick="displayModal('editWords')"
+              />
+            </div>
+
+            <div id="game-content" class="tab">
+              <a class="button" href="../game.html">Test Game</a>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <div class="modal" id="profile">
-        <div class="content">
-            <span class="close" onclick="closeModal('profile')">&times;</span>
-            <section class="wrapper">
-                <div class="inner">
-                    <h1>Account Settings</h1>
-                    <div class="row uniform">
-                        <div class="6u 12u$(xsmall)">
-                            <input type="text" name="name" id="name" placeholder="Name">
-                        </div>
-                        <div class="6u 12u$(xsmall)">
-                            <input id="" type="submit" value="Update Name" class="special" onclick="updateName()">
-                        </div>
-                        <div class="6u 12u$(xsmall)">
-                            <input id="update-password" type="submit" value="Update Password"
-                                onclick="updatePassword()" />
-                        </div>
-                        <div class="6u 12u$(xsmall)">
-                            <input id="" type="submit" value="Sign Out" onclick="signOut()">
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+      <div class="content">
+        <span class="close" onclick="closeModal('profile')">&times;</span>
+        <section class="wrapper">
+          <div class="inner">
+            <h1>Account Settings</h1>
+            <div class="row uniform">
+              <div class="6u 12u$(xsmall)">
+                <input type="text" name="name" id="name" placeholder="Name" />
+              </div>
+              <div class="6u 12u$(xsmall)">
+                <input
+                  id=""
+                  type="submit"
+                  value="Update Name"
+                  class="special"
+                  onclick="updateName()"
+                />
+              </div>
+              <div class="6u 12u$(xsmall)">
+                <input
+                  id="update-password"
+                  type="submit"
+                  value="Update Password"
+                  onclick="updatePassword()"
+                />
+              </div>
+              <div class="6u 12u$(xsmall)">
+                <input
+                  id=""
+                  type="submit"
+                  value="Sign Out"
+                  onclick="signOut()"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div class="modal" id="createStudent">
-        <div class="content">
-            <span class="close" onclick="closeModal('createStudent')">&times;</span>
-            <section class="wrapper">
-                <div class="inner">
-                    <div class="form">
-                        <input type="text" name="student-name" id="student-name" placeholder="Student Name">
-                        <input type="password" name="student-password" id="student-password"
-                            placeholder="Student Password">
-                        <input type="password" name="student-confirm-password" id="student-confirm-password"
-                            placeholder="Confirm Student Password">
+      <div class="content">
+        <span class="close" onclick="closeModal('createStudent')">&times;</span>
+        <section class="wrapper">
+          <div class="inner">
+            <div class="form">
+              <input
+                type="text"
+                name="student-name"
+                id="student-name"
+                placeholder="Student Name"
+              />
+              <input
+                type="password"
+                name="student-password"
+                id="student-password"
+                placeholder="Student Password"
+              />
+              <input
+                type="password"
+                name="student-confirm-password"
+                id="student-confirm-password"
+                placeholder="Confirm Student Password"
+              />
 
-                        <input id="" type="submit" value="Create Account" class="special" onclick="addStudentAccount()">
-                    </div>
-                </div>
-            </section>
-        </div>
+              <input
+                id=""
+                type="submit"
+                value="Create Account"
+                class="special"
+                onclick="addStudentAccount()"
+              />
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div class="modal" id="editWords">
-        <div class="content">
-            <span class="close" onclick="closeModal('editWords')">&times;</span>
-            <section class="wrapper">
-                <div class="inner">
-                    <div class="form">
-                        <div class="row uniform">
-                            <div class="6u 12u$(xsmall)">
-                                <input type="text" name="new-word" id="new-word" placeholder="New Word">
-                            </div>
-                            <div class="6u$ 12u$(xsmall)">
-                                <select id="sort">
-                                    <option id="first-grade">First Grade</option>
-                                    <option id="second-grade">Second Grade</option>
-                                    <option id="third-grade">Third Grade</option>
-                                    <option id="fourth-grade">Fourth Grade</option>
-                                    <option id="fifth-grade">Fifth Grade</option>
-                                </select>
-                            </div>
-                            <div class="6u$ 12u$(xsmall)">
-                                <input id="" type="submit" value="Add Word" class="special" onclick="addWord()">
-                            </div>
-                        </div>
-                    </div>
+      <div class="content">
+        <span class="close" onclick="closeModal('editWords')">&times;</span>
+        <section class="wrapper">
+          <div class="inner">
+            <div class="form">
+              <div class="row uniform">
+                <div class="6u 12u$(xsmall)">
+                  <input
+                    type="text"
+                    name="new-word"
+                    id="new-word"
+                    placeholder="New Word"
+                  />
                 </div>
-            </section>
-        </div>
+                <div class="6u$ 12u$(xsmall)">
+                  <select id="sort">
+                    <option id="first-grade">First Grade</option>
+                    <option id="second-grade">Second Grade</option>
+                    <option id="third-grade">Third Grade</option>
+                    <option id="fourth-grade">Fourth Grade</option>
+                    <option id="fifth-grade">Fifth Grade</option>
+                  </select>
+                </div>
+                <div class="6u$ 12u$(xsmall)">
+                  <input
+                    id=""
+                    type="submit"
+                    value="Add Word"
+                    class="special"
+                    onclick="addWord()"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
 
     <!-- Scripts -->
@@ -144,6 +209,5 @@
     <script src="../assets/js/ui/util.js"></script>
     <script src="../assets/js/ui/main.js"></script>
     <script src="../assets/js/ui/tabs.js"></script>
-</body>
-
+  </body>
 </html>

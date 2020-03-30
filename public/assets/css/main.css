@@ -1680,6 +1680,23 @@
 		text-align: right;
 	}
 
+	.underline-large {
+		background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+		background-repeat: no-repeat;
+		background-size: 100% 0.2em;
+		background-position: 0 88%;
+		transition: background-size 0.4s ease-in;
+	}
+
+		.underline-large:hover {
+			cursor: pointer;
+			background-size: 100% 50%;
+		}
+		
+		.underline-large.active {
+			background-size: 100% 100%;
+		}
+
 	input, select, textarea {
 		color: var(--dark-gray);
 	}
@@ -4209,11 +4226,6 @@
 		display: inline-block;
 		padding: 0 2em;
 	}
-
-		.tabs-wrapper .headers h2:hover {
-			cursor: pointer;
-			color: var(--light-gray);
-		}
 
 	.tabs-wrapper .tabs .tab {
 		display: none;
