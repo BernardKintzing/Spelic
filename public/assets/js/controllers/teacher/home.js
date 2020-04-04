@@ -139,62 +139,70 @@ function updateCustomWordsUI() {
 	wordsList.innerHTML += '<h3 id="2">Second Grade</h3>';
 	currentUser.words.SECOND_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-			`
-			  <div class="list-content">
-				  <h2>` +
-			word.word +
-			`</h2>
-				  <button onclick="displayModal('editWord', '` +
-			word.uid +
-			`')">Edit</button>
-			  </div>
-		  `;
-	});
+    `
+      <div class="list-content">
+        <h2 id="word` +
+    word.uid +
+    `">` +
+    word.word +
+    `</h2>
+        <button onclick="displayEditWordModal(2, '` +
+    word.uid +
+    `')">Edit</button>
+      </div>
+    `;
+});
 
 	wordsList.innerHTML += '<h3 id="3">Third Grade</h3>';
 	currentUser.words.THIRD_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-			`
-			  <div class="list-content">
-				  <h2>` +
-			word.word +
-			`</h2>
-				  <button onclick="displayModal('editWord', '` +
-			word.uid +
-			`')">Edit</button>
-			  </div>
-		  `;
-	});
+    `
+      <div class="list-content">
+        <h2 id="word` +
+    word.uid +
+    `">` +
+    word.word +
+    `</h2>
+        <button onclick="displayEditWordModal(3, '` +
+    word.uid +
+    `')">Edit</button>
+      </div>
+    `;
+});
 
 	wordsList.innerHTML += '<h3 id="4">Fourth Grade</h3>';
 	currentUser.words.FOURTH_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-			`
-			  <div class="list-content">
-				  <h2>` +
-			word.word +
-			`</h2>
-				  <button onclick="displayModal('editWord', '` +
-			word.uid +
-			`')">Edit</button>
-			  </div>
-		  `;
-	});
+    `
+      <div class="list-content">
+        <h2 id="word` +
+    word.uid +
+    `">` +
+    word.word +
+    `</h2>
+        <button onclick="displayEditWordModal(4, '` +
+    word.uid +
+    `')">Edit</button>
+      </div>
+    `;
+});
 
 	wordsList.innerHTML += '<h3 id="5">Fifth Grade</h3>';
 	currentUser.words.FIFTH_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-			`
-			  <div class="list-content">
-				  <h2>` +
-			word.word +
-			`</h2>
-				  <button onclick="displayModal('editWord', '` +
-			word.uid +
-			`')">Edit</button>
-			  </div>
-		  `;
-	});
+    `
+      <div class="list-content">
+        <h2 id="word` +
+    word.uid +
+    `">` +
+    word.word +
+    `</h2>
+        <button onclick="displayEditWordModal(5, '` +
+    word.uid +
+    `')">Edit</button>
+      </div>
+    `;
+});
 }
 
 /**
