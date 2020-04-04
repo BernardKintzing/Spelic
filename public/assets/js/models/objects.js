@@ -51,10 +51,12 @@ var customWords = {
  * @var word
  * @param {String} word
  * @param {String} hint
+ * @param {String} uid
  */
 var word = {
     word: undefined,
-    hint: undefined
+    hint: undefined,
+    uid: undefined
 }
 
 /**

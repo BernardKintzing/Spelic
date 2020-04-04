@@ -26,13 +26,13 @@ var currentUser = undefined;
  * @var currentUserListener
  */
 var currentUserListener = {
-	aListener: function(val) {},
-	registerListener: function(listener) {
+	aListener: function (val) {},
+	registerListener: function (listener) {
 		this.aListener = listener;
 	},
-	triggerListener: function(val) {
+	triggerListener: function (val) {
 		this.aListener(val);
-	}
+	},
 };
 
 //-------------- VARIABLE GETTERS & SETTERS --------------//
@@ -68,7 +68,7 @@ function currentUserIsStudent() {
  *
  * @param {firebase.auth().user} authUser
  */
-auth.onAuthStateChanged(function(authUser) {
+auth.onAuthStateChanged(function (authUser) {
 	if (authUser) {
 		// User signed in
 
@@ -76,7 +76,7 @@ auth.onAuthStateChanged(function(authUser) {
 		tasks = 2;
 
 		var currentUserSnapshotPromise = retrieveUserSnapshot(authUser.uid);
-		currentUserSnapshotPromise.then(function(result) {
+		currentUserSnapshotPromise.then(function (result) {
 			if (result.success) {
 				// Snapshot successfully retrieved
 
@@ -94,15 +94,15 @@ auth.onAuthStateChanged(function(authUser) {
 					var studentsSnapshot = currentUserSnapshot.child(
 						"students"
 					);
-					studentsSnapshot.forEach(function(studentSnapshot) {
+					studentsSnapshot.forEach(function (studentSnapshot) {
 						var studentPromise = retrieveStudentAuth(
 							studentSnapshot.val().uid
 						);
 						studentPromises.push(studentPromise);
 					});
 
-					Promise.all(studentPromises).then(function(values) {
-						values.forEach(function(studentPromise) {
+					Promise.all(studentPromises).then(function (values) {
+						values.forEach(function (studentPromise) {
 							if (studentPromise.data[0]) {
 								// Auth account successfully retrieved
 								var newStudent = Object.assign({}, student);
@@ -124,17 +124,18 @@ auth.onAuthStateChanged(function(authUser) {
 					customWordsPromise = retrieveCustomWords(
 						currentUser.auth.uid
 					);
-					customWordsPromise.then(function(result) {
+					customWordsPromise.then(function (result) {
 						if (result.success) {
 							// Custom words successfully retrieved
 
 							currentUser.words = customWords;
-							result.return.forEach(function(gradeSnapshot) {
+							result.return.forEach(function (gradeSnapshot) {
 								var grade = parseInt(gradeSnapshot.key);
-								gradeSnapshot.forEach(function(wordSnapshot) {
+								gradeSnapshot.forEach(function (wordSnapshot) {
 									var newWord = Object.assign({}, word);
 									newWord.word = wordSnapshot.val().word;
 									newWord.hint = wordSnapshot.val().hint;
+									newWord.uid = wordSnapshot.key;
 
 									switch (grade) {
 										case FIRST_GRADE:
@@ -209,10 +210,10 @@ auth.onAuthStateChanged(function(authUser) {
 async function signInWithEmailAndPassword(email, password) {
 	return auth
 		.signInWithEmailAndPassword(email, password)
-		.then(function(result) {
+		.then(function (result) {
 			return result;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -229,10 +230,10 @@ async function signInWithEmailAndPassword(email, password) {
 async function signOutFirebaseUser() {
 	return auth
 		.signOut()
-		.then(function() {
+		.then(function () {
 			return true;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -252,10 +253,10 @@ async function signOutFirebaseUser() {
 async function createUserWithEmailAndPassword(email, password) {
 	return auth
 		.createUserWithEmailAndPassword(email, password)
-		.then(function(result) {
+		.then(function (result) {
 			return result;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -274,12 +275,12 @@ async function createUserWithEmailAndPassword(email, password) {
 async function updateUserDisplayName(name) {
 	return currentUser.auth
 		.updateProfile({
-			displayName: name
+			displayName: name,
 		})
-		.then(function() {
+		.then(function () {
 			return true;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -301,10 +302,10 @@ async function updateUserDisplayName(name) {
 async function sendPasswordResetEmail(email) {
 	return auth
 		.sendPasswordResetEmail(email)
-		.then(function() {
+		.then(function () {
 			return "Reset link has been emailed to " + email;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -326,12 +327,12 @@ async function retrieveUserSnapshot(uid) {
 	return database
 		.ref("users/" + uid)
 		.once("value")
-		.then(function(snapshot) {
+		.then(function (snapshot) {
 			result.success = true;
 			result.return = snapshot;
 			return result;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			result.success = false;
 			result.return = error;
 			return result;
@@ -356,12 +357,12 @@ async function retrieveCustomWords(uid) {
 	return database
 		.ref("users/" + uid + "/words/")
 		.once("value")
-		.then(function(snapshot) {
+		.then(function (snapshot) {
 			result.success = true;
 			result.return = snapshot;
 			return result;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			result.success = false;
 			result.return = error;
 			return result;
@@ -385,12 +386,12 @@ async function pushBlankUserToDatabase(uid, status) {
 	return database
 		.ref("users/" + uid)
 		.set({
-			accountType: status
+			accountType: status,
 		})
-		.then(function() {
+		.then(function () {
 			return true;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
 		});
 }
@@ -407,17 +408,52 @@ async function pushBlankUserToDatabase(uid, status) {
  * @returns {Promise} On success a boolean true is returned
  * else the error is returned
  */
-async function addWordToDatabase(word, grade) {
+async function addWordToDatabase(word, hint, grade) {
 	return database
 		.ref("users/" + currentUser.auth.uid + "/words/" + grade)
 		.push({
-			word
+			word: word,
+			hint: hint,
 		})
-		.then(function() {
+		.then(function () {
 			return true;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			return error;
+		});
+}
+
+/**
+ * @description update a teachers custom word.
+ * 
+ * @async
+ * @function updateWord
+ * @param {String} word old word beign updated
+ * @param {String} grade grade associated with custom work
+ * @param {String} newWord the updated word
+ * @param {String} newHint the updated hint
+ * @returns {Promise} Returns an asyncReturn 
+ * 
+ * @todo Make sure only a teacher can access this function
+ */
+async function updateWord(word, grade, newWord, newHint) {
+	var result = asyncReturn;
+	
+	return database
+		.ref(
+			"users/" + currentUser.auth.uid + "/words/" + grade + "/" + word.uid
+		)
+		.set({
+			word: newWord,
+			hint: newHint
+		})
+		.then(function() {
+			result.success = true
+			return result;
+		}).catch(function(error) {
+			result.success = false;
+			result.return = error;
+			return result; 
 		});
 }
 
@@ -438,17 +474,17 @@ async function addWordToDatabase(word, grade) {
 async function addStudentToTeacher(uid) {
 	var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT);
 
-	return promise.then(function(result) {
+	return promise.then(function (result) {
 		if (result == true) {
 			return database
 				.ref("users/" + currentUser.auth.uid + "/students/")
 				.push({
-					uid
+					uid,
 				})
-				.then(function() {
+				.then(function () {
 					return true;
 				})
-				.catch(function(error) {
+				.catch(function (error) {
 					return error;
 				});
 		} else {
@@ -475,8 +511,8 @@ async function retrieveGameWords(grade) {
 	return database
 		.ref("words/" + grade)
 		.once("value")
-		.then(function(snapshot) {
-			snapshot.forEach(function(wordSnapshot) {
+		.then(function (snapshot) {
+			snapshot.forEach(function (wordSnapshot) {
 				var newWord = Object.assign({}, word);
 				newWord.word = wordSnapshot.val().word;
 				newWord.hint = wordSnapshot.val().hint;
@@ -487,7 +523,7 @@ async function retrieveGameWords(grade) {
 			result.return = words;
 			return result;
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			result.success = false;
 			result.return = error;
 
@@ -515,21 +551,21 @@ async function createStudentAccount(studentName, studentPassword) {
 	createStudentAccountFunction({
 		name: studentName,
 		password: studentPassword,
-		teacherName: currentUser.auth.displayName
+		teacherName: currentUser.auth.displayName,
 	})
-		.then(function(result) {
+		.then(function (result) {
 			if (result.data.uid != null) {
 				promise = addStudentToTeacher(result.data.uid);
 
 				promise
-					.then(function(result) {
+					.then(function (result) {
 						if (result == true) {
 							alert("Student successfully created");
 						} else {
 							alert(result);
 						}
 					})
-					.catch(function(error) {
+					.catch(function (error) {
 						alert(error);
 					});
 			} else if (result.data.error != null) {
@@ -538,7 +574,7 @@ async function createStudentAccount(studentName, studentPassword) {
 				alert("An unknown error occured");
 			}
 		})
-		.catch(function(error) {
+		.catch(function (error) {
 			alert(error);
 		});
 }
@@ -560,10 +596,10 @@ async function createStudentAccount(studentName, studentPassword) {
  */
 async function retrieveStudentAuth(uid) {
 	var promise = retrieveStudentAuthFunction({
-		uid: uid
+		uid: uid,
 	});
 
-	return promise.then(function(result) {
+	return promise.then(function (result) {
 		return result;
 	});
 }
