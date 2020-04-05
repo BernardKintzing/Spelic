@@ -405,55 +405,94 @@ async function pushBlankUserToDatabase(uid, status) {
  * @param {String} word Teachers custom word
  * @param {String} grade The grade that the word is associated
  * with.
- * @returns {Promise} On success a boolean true is returned
- * else the error is returned
+ * @returns {Promise} Returns async return with the succees of
+ * push. On success the uid of new word is returned else error is returned.
  */
-async function addWordToDatabase(word, hint, grade) {
-	return database
+async function addWordToDatabase(newWord, newHint, grade) {
+	var result = asyncReturn;
+
+	var key = firebase
+		.database()
 		.ref("users/" + currentUser.auth.uid + "/words/" + grade)
-		.push({
-			word: word,
-			hint: hint,
+		.push().key;
+	return database
+		.ref("users/" + currentUser.auth.uid + "/words/" + grade + "/" + key)
+		.set({
+			word: newWord,
+			hint: newHint,
 		})
 		.then(function () {
-			return true;
+			var word = Object.assign({}, word);
+			console.log(word)
+			word.word = newWord;
+			console.log(word)
+			word.hint = newHint;
+			console.log(word)
+			word.uid = key;
+			console.log(word)
+			switch (parseInt(grade)) {
+				case FIRST_GRADE:
+					currentUser.words.FIRST_GRADE.push(word);
+					break;
+				case SECOND_GRADE:
+					currentUser.words.SECOND_GRADE.push(word);
+					break;
+				case THIRD_GRADE:
+					currentUser.words.THIRD_GRADE.push(word);
+					break;
+				case FOURTH_GRADE:
+					currentUser.words.FOURTH_GRADE.push(word);
+					break;
+				case FIFTH_GRADE:
+					currentUser.words.FIFTH_GRADE.push(word);
+					break;
+			}
+
+			console.log(currentUser);
+
+			result.success = true;
+			result.return = key;
+			return result;
 		})
 		.catch(function (error) {
-			return error;
+			result.success = false;
+			result.return = error;
+			return result;
 		});
 }
 
 /**
  * @description update a teachers custom word.
- * 
+ *
  * @async
  * @function updateWord
  * @param {String} word old word beign updated
  * @param {String} grade grade associated with custom work
  * @param {String} newWord the updated word
  * @param {String} newHint the updated hint
- * @returns {Promise} Returns an asyncReturn 
- * 
+ * @returns {Promise} Returns an asyncReturn
+ *
  * @todo Make sure only a teacher can access this function
  */
 async function updateWord(word, grade, newWord, newHint) {
 	var result = asyncReturn;
-	
+
 	return database
 		.ref(
 			"users/" + currentUser.auth.uid + "/words/" + grade + "/" + word.uid
 		)
 		.set({
 			word: newWord,
-			hint: newHint
+			hint: newHint,
 		})
-		.then(function() {
-			result.success = true
+		.then(function () {
+			result.success = true;
 			return result;
-		}).catch(function(error) {
+		})
+		.catch(function (error) {
 			result.success = false;
 			result.return = error;
-			return result; 
+			return result;
 		});
 }
 

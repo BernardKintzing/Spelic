@@ -139,70 +139,70 @@ function updateCustomWordsUI() {
 	wordsList.innerHTML += '<h3 id="2">Second Grade</h3>';
 	currentUser.words.SECOND_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-    `
+			`
       <div class="list-content">
         <h2 id="word` +
-    word.uid +
-    `">` +
-    word.word +
-    `</h2>
+			word.uid +
+			`">` +
+			word.word +
+			`</h2>
         <button onclick="displayEditWordModal(2, '` +
-    word.uid +
-    `')">Edit</button>
+			word.uid +
+			`')">Edit</button>
       </div>
     `;
-});
+	});
 
 	wordsList.innerHTML += '<h3 id="3">Third Grade</h3>';
 	currentUser.words.THIRD_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-    `
+			`
       <div class="list-content">
         <h2 id="word` +
-    word.uid +
-    `">` +
-    word.word +
-    `</h2>
+			word.uid +
+			`">` +
+			word.word +
+			`</h2>
         <button onclick="displayEditWordModal(3, '` +
-    word.uid +
-    `')">Edit</button>
+			word.uid +
+			`')">Edit</button>
       </div>
     `;
-});
+	});
 
 	wordsList.innerHTML += '<h3 id="4">Fourth Grade</h3>';
 	currentUser.words.FOURTH_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-    `
+			`
       <div class="list-content">
         <h2 id="word` +
-    word.uid +
-    `">` +
-    word.word +
-    `</h2>
+			word.uid +
+			`">` +
+			word.word +
+			`</h2>
         <button onclick="displayEditWordModal(4, '` +
-    word.uid +
-    `')">Edit</button>
+			word.uid +
+			`')">Edit</button>
       </div>
     `;
-});
+	});
 
 	wordsList.innerHTML += '<h3 id="5">Fifth Grade</h3>';
 	currentUser.words.FIFTH_GRADE.forEach(function (word) {
 		wordsList.innerHTML +=
-    `
+			`
       <div class="list-content">
         <h2 id="word` +
-    word.uid +
-    `">` +
-    word.word +
-    `</h2>
+			word.uid +
+			`">` +
+			word.word +
+			`</h2>
         <button onclick="displayEditWordModal(5, '` +
-    word.uid +
-    `')">Edit</button>
+			word.uid +
+			`')">Edit</button>
       </div>
     `;
-});
+	});
 }
 
 /**
@@ -286,23 +286,29 @@ function addWord() {
 	var promise = addWordToDatabase(newWord, newHint, grade);
 
 	promise.then(function (result) {
-		if (result == true) {
+		if (result.success == true) {
 			var gradeSection = document.getElementById(grade);
 			insertAfterEndAdjacentHTML(
-				gradeSection,
-				`<div class="list-content">
-          <h2>` +
-					newWord +
-					`</h2>
-          <button onclick="displayModal('editWord', '` +
-					word.uid +
-					`')">Edit</button>
-        </div>`
+        gradeSection,
+        `
+        <div class="list-content">
+          <h2 id="word` +
+        result.return +
+        `">` +
+        newWord +
+        `</h2>
+          <button onclick="displayEditWordModal(`+ grade + `, '` +
+          result.return +
+        `')">Edit</button>
+        </div>
+      `
 			);
 
+      wordInputField.value = "";
+        hintInputField.value = "";
 			alert("Word successfully added");
 		} else {
-			alert(result);
+			alert(result.return);
 		}
 	});
 }
@@ -355,14 +361,6 @@ function displayEditWordModal(grade, uid) {
 			});
 			break;
 		case SECOND_GRADE:
-			currentUser.words.FIRST_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-				}
-			});
-			break;
-		case THIRD_GRADE:
 			currentUser.words.SECOND_GRADE.forEach(function (word) {
 				if (word.uid == uid) {
 					wordInput.value = word.word;
@@ -370,7 +368,7 @@ function displayEditWordModal(grade, uid) {
 				}
 			});
 			break;
-		case FOURTH_GRADE:
+		case THIRD_GRADE:
 			currentUser.words.THIRD_GRADE.forEach(function (word) {
 				if (word.uid == uid) {
 					wordInput.value = word.word;
@@ -378,8 +376,16 @@ function displayEditWordModal(grade, uid) {
 				}
 			});
 			break;
-		case FIFTH_GRADE:
+		case FOURTH_GRADE:
 			currentUser.words.FOURTH_GRADE.forEach(function (word) {
+				if (word.uid == uid) {
+					wordInput.value = word.word;
+					hintInput.value = word.hint;
+				}
+			});
+			break;
+		case FIFTH_GRADE:
+			currentUser.words.FIFTH_GRADE.forEach(function (word) {
 				if (word.uid == uid) {
 					wordInput.value = word.word;
 					hintInput.value = word.hint;
