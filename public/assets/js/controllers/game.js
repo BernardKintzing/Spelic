@@ -1,3 +1,7 @@
+import swal from 'sweetalert';
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 // Constants
 const ASTEROID_WIDTH =
   20 * parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -46,11 +50,12 @@ function init() {
 }
 init();
 
+
 function play() {
   if (gameWords.length == 0) {
-    alert("You win");
+    swal("Good job!", "You passed the level!", "success");
   } else if (lives == 0) {
-    alert("You lose");
+    swal ( "You Lose!" ,  "Please refresh and try again!" ,  "error" )
     isPlaying = false;
   } else {
     sendAsteroid();
@@ -90,8 +95,8 @@ function submitVowel(vowel) {
     asteroid.style.left = -ASTEROID_WIDTH;
     currentPos = -ASTEROID_WIDTH;
     play();
+    }
   }
-}
 
 function removeVowel(word) {
   var vowelIndices = [];
