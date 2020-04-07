@@ -76,7 +76,8 @@ function sendAsteroid() {
         lives--;
         asteroid.style.left = -ASTEROID_WIDTH;
         currentPos = -ASTEROID_WIDTH;
-        // play();
+        clearInterval(motionInterval);
+        play();
       }
     }
   }, 20);
