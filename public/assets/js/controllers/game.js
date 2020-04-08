@@ -7,7 +7,6 @@ const EARTH_DIAMETER =
 // DOM elements
 var earth = document.getElementById("earth");
 var asteroid = document.getElementById("asteroid");
-var explosion = document.getElementById("explosion");
 var asteroidWord = asteroid.children[0];
 var hint = document.getElementById("hint");
 var playToggle = document.getElementById("play-pause");
@@ -30,11 +29,6 @@ function init() {
   asteroid.style.width = ASTEROID_WIDTH + "px";
   asteroid.style.height = ASTEROID_WIDTH / 2 + "px";
   asteroid.style.left = -ASTEROID_WIDTH + "px";
-
-  // Set explosion styling
-  explosion.style.width = ASTEROID_WIDTH + "px";
-  explosion.style.height = ASTEROID_WIDTH + "px";
-  explosion.style.left = -ASTEROID_WIDTH + "px";
 
   // TODO: retrieve users progress, game words, and custom
   // words on completion of all promises start the game
@@ -75,7 +69,6 @@ function sendAsteroid() {
     if (isPlaying) {
       currentPos += speed;
       asteroid.style.left = currentPos + "px";
-      explosion.style.left = currentPos + "px";
       var asteroidRect = asteroid.getBoundingClientRect();
       var earthRect = earth.getBoundingClientRect();
       if (asteroidRect.right > earthRect.left) {
@@ -83,8 +76,6 @@ function sendAsteroid() {
         heart.style.color = "gray";
         lives--;
         asteroid.style.left = -ASTEROID_WIDTH;
-
-        explosion.style.left = -ASTEROID_WIDTH;
         currentPos = -ASTEROID_WIDTH;
         clearInterval(motionInterval);
         play();
@@ -104,17 +95,21 @@ function submitVowel(vowel) {
   // TODO: make both lowercase
 
   if (vowel == hiddenVowel) {
-    explosion.style.visibility = 'visible';
-    asteroid.style.visibility = 'hidden';
+    clearInterval(motionInterval);
+    asteroid.style.backgroundImage = "url('/assets/images/explosion.png')";
+    asteroidWord.style.visibility = "hidden";
     setTimeout(() => {
-      clearInterval(motionInterval);
+      asteroid.style.visibility = "hidden";
       asteroid.style.left = -ASTEROID_WIDTH;
-      explosion.style.left = -ASTEROID_WIDTH;
       currentPos = -ASTEROID_WIDTH;
-      play();}, 250);
+      setTimeout(() => {
+        asteroid.style.backgroundImage = "url('/assets/images/asteroid.png')";
+        asteroidWord.style.visibility = "visible";
+        asteroid.style.visibility = "visible";
+        play();
+      }, 250);
+    }, 750);
     }
-  explosion.style.visibility = 'hidden';
-  asteroid.style.visibility = 'visible';
   }
 
 function removeVowel(word) {

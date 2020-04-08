@@ -4320,17 +4320,6 @@
 		z-index: 10000;
 	}
 
-	#explosion {
-		background-image: url("../images/explosion.png");
-		background-size: contain;
-		background-repeat: no-repeat;
-		position: absolute;
-		visibility: hidden;
-		top: 50%;
-		transform: translateY(-50%);
-		z-index: 10000;
-	}
-
 	#asteroid {
 		background-image: url("../images/asteroid.png");
 		background-size: contain;
