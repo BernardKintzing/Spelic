@@ -4336,6 +4336,7 @@
 		background-size: contain;
 		background-repeat: no-repeat;
 		position: absolute;
+        visibility: visible;
 		top: 50%;
 		transform: translateY(-50%);
 		z-index: 10000;
@@ -4345,6 +4346,7 @@
 			font-weight: bold;
 			color: var(--white);
 			position: absolute;
+            visibility: visible;
 			right: 1rem;
 			top: 50%;
 			transform: translateY(-50%);

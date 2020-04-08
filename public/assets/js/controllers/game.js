@@ -97,9 +97,13 @@ function submitVowel(vowel) {
   // TODO: make both lowercase
   if (vowel == hiddenVowel) {
     clearInterval(motionInterval);
+    explosion.style.visibility = 'visible';
+    asteroid.style.visibility = 'hidden';
     asteroid.style.left = -ASTEROID_WIDTH;
     explosion.style.left = -ASTEROID_WIDTH;
     currentPos = -ASTEROID_WIDTH;
+    explosion.style.visibility = 'hidden';
+    asteroid.style.visibility = 'visible';
     play();
     }
   }
