@@ -93,19 +93,28 @@ function sendAsteroid() {
   }, 20);
 }
 
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  var timeup = null;
+  do {timeup = new Date().getTime(); }
+  while (timeup-start < milliseconds )
+}
+
 function submitVowel(vowel) {
   // TODO: make both lowercase
+
   if (vowel == hiddenVowel) {
-    clearInterval(motionInterval);
     explosion.style.visibility = 'visible';
     asteroid.style.visibility = 'hidden';
-    asteroid.style.left = -ASTEROID_WIDTH;
-    explosion.style.left = -ASTEROID_WIDTH;
-    currentPos = -ASTEROID_WIDTH;
-    explosion.style.visibility = 'hidden';
-    asteroid.style.visibility = 'visible';
-    play();
+    setTimeout(() => {
+      clearInterval(motionInterval);
+      asteroid.style.left = -ASTEROID_WIDTH;
+      explosion.style.left = -ASTEROID_WIDTH;
+      currentPos = -ASTEROID_WIDTH;
+      play();}, 250);
     }
+  explosion.style.visibility = 'hidden';
+  asteroid.style.visibility = 'visible';
   }
 
 function removeVowel(word) {
