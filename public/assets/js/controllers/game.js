@@ -1,7 +1,3 @@
-import swal from 'sweetalert';
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
 // Constants
 const ASTEROID_WIDTH =
   20 * parseFloat(getComputedStyle(document.documentElement).fontSize);
