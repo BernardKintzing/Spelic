@@ -319,6 +319,18 @@ function addWord() {
   });
 }
 
+/**
+ * @description Display a modal containing the students
+ * information as well as provididng the teacher the
+ * ability to edit the students information.
+ *
+ * @function displayEditStudentModal
+ * @param {String} uid Firebase Auth identifier
+ * of student.
+ *
+ * @todo student password does not work due to CORS
+ * controls.
+ */
 function displayEditStudentModal(uid) {
   var modal = document.getElementById("editStudent");
   var content = document.getElementById("editStudentContent");
@@ -353,7 +365,6 @@ function displayEditStudentModal(uid) {
         var confirmPassword = confirmPasswordField.value;
 
         if (password == confirmPassword) {
-
           var promise = resetStudentPassword(student.auth.uid, password);
 
           promise
@@ -489,4 +500,11 @@ function closeModal(modalName) {
  */
 function insertAfterEndAdjacentHTML(element, html) {
   element.insertAdjacentHTML("afterend", html);
+}
+
+function testGame() {
+  var level_select = document.getElementById("game-level");
+  var level = level_select.options[level_select.selectedIndex].value;
+
+  window.location.href = "../../game.html?level=" + level;
 }

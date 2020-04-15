@@ -4,6 +4,11 @@ const ASTEROID_WIDTH =
 const EARTH_DIAMETER =
   60 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
+//URL data
+var url = window.location.search;
+var params = new URLSearchParams(url);
+var level = undefined;
+
 // DOM elements
 var earth = document.getElementById("earth");
 var asteroid = document.getElementById("asteroid");
@@ -25,6 +30,12 @@ function init() {
   // Load background
   particlesJS.load("particles-js", "/assets/js/particles/particles.json");
 
+  if(currentUserIsTeacher) {
+    level = params.get("level");
+  } else {
+    // TODO: get students level
+  }
+
   // Set asteroid styling
   asteroid.style.width = ASTEROID_WIDTH + "px";
   asteroid.style.height = ASTEROID_WIDTH / 2 + "px";
@@ -32,7 +43,7 @@ function init() {
 
   // TODO: retrieve users progress, game words, and custom
   // words on completion of all promises start the game
-  var promise = retrieveGameWords(FIRST_GRADE);
+  var promise = retrieveGameWords(level);
   promise.then(function(result) {
     if (result.success) {
       // Words successfully retrieved
