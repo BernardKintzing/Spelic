@@ -5,11 +5,15 @@ var functions = firebase.functions();
 
 // Firebase Functions functions
 var createStudentAccountFunction = functions.httpsCallable(
-	"createStudentAccountFunction"
+  "createStudentAccountFunction"
 );
 
 var retrieveStudentAuthFunction = functions.httpsCallable(
-	"retrieveStudentAuthFunction"
+  "retrieveStudentAuthFunction"
+);
+
+var resetStudentPasswordFunction = functions.httpsCallable(
+  "resetStudentPasswordFunction"
 );
 
 /**
@@ -26,13 +30,13 @@ var currentUser = undefined;
  * @var currentUserListener
  */
 var currentUserListener = {
-	aListener: function (val) {},
-	registerListener: function (listener) {
-		this.aListener = listener;
-	},
-	triggerListener: function (val) {
-		this.aListener(val);
-	},
+  aListener: function (val) {},
+  registerListener: function (listener) {
+    this.aListener = listener;
+  },
+  triggerListener: function (val) {
+    this.aListener(val);
+  },
 };
 
 //-------------- VARIABLE GETTERS & SETTERS --------------//
@@ -45,7 +49,7 @@ var currentUserListener = {
  * false otherwise.
  */
 function currentUserIsTeacher() {
-	return currentUser.accountType == ACCOUNT_TYPE_TEACHER;
+  return currentUser.accountType == ACCOUNT_TYPE_TEACHER;
 }
 
 /**
@@ -56,7 +60,7 @@ function currentUserIsTeacher() {
  * false otherwise.
  */
 function currentUserIsStudent() {
-	return currentUser.accountType == ACCOUNT_TYPE_STUDENT;
+  return currentUser.accountType == ACCOUNT_TYPE_STUDENT;
 }
 
 //----------- FIREBASE AUTHENTICATION FUNCTIONS -----------//
@@ -69,131 +73,111 @@ function currentUserIsStudent() {
  * @param {firebase.auth().user} authUser
  */
 auth.onAuthStateChanged(function (authUser) {
-	if (authUser) {
-		// User signed in
+  if (authUser) {
+    // User signed in
 
-		// The number of async tasks that need to be completed
-		tasks = 2;
+    // The number of async tasks that need to be completed
+    tasks = 2;
 
-		var currentUserSnapshotPromise = retrieveUserSnapshot(authUser.uid);
-		currentUserSnapshotPromise.then(function (result) {
-			if (result.success) {
-				// Snapshot successfully retrieved
+    var currentUserSnapshotPromise = retrieveUserSnapshot(authUser.uid);
+    currentUserSnapshotPromise.then(function (result) {
+      if (result.success) {
+        // Snapshot successfully retrieved
 
-				var currentUserSnapshot = result.return;
-				if (
-					currentUserSnapshot.val().accountType ==
-					ACCOUNT_TYPE_TEACHER
-				) {
-					// Teacher account
-					currentUser = Object.assign({}, teacher);
-					currentUser.auth = authUser;
+        var currentUserSnapshot = result.return;
+        if (currentUserSnapshot.val().accountType == ACCOUNT_TYPE_TEACHER) {
+          // Teacher account
+          currentUser = Object.assign({}, teacher);
+          currentUser.auth = authUser;
 
-					// Retrieve students
-					var studentPromises = [];
-					var studentsSnapshot = currentUserSnapshot.child(
-						"students"
-					);
-					studentsSnapshot.forEach(function (studentSnapshot) {
-						var studentPromise = retrieveStudentAuth(
-							studentSnapshot.val().uid
-						);
-						studentPromises.push(studentPromise);
-					});
+          // Retrieve students
+          var studentPromises = [];
+          var studentsSnapshot = currentUserSnapshot.child("students");
+          studentsSnapshot.forEach(function (studentSnapshot) {
+            var studentPromise = retrieveStudentAuth(studentSnapshot.val().uid);
+            studentPromises.push(studentPromise);
+          });
 
-					Promise.all(studentPromises).then(function (values) {
-						values.forEach(function (studentPromise) {
-							if (studentPromise.data[0]) {
-								// Auth account successfully retrieved
-								var newStudent = Object.assign({}, student);
-								newStudent.auth = studentPromise.data[1];
-								currentUser.students.push(newStudent);
-							} else {
-								// Error retrieving student auth account
-								console.log(studentPromise.data[1]);
-							}
-						});
+          Promise.all(studentPromises).then(function (values) {
+            values.forEach(function (studentPromise) {
+              if (studentPromise.data[0]) {
+                // Auth account successfully retrieved
+                var newStudent = Object.assign({}, student);
+                newStudent.auth = studentPromise.data[1];
+                currentUser.students.push(newStudent);
+              } else {
+                // Error retrieving student auth account
+                console.log(studentPromise.data[1]);
+              }
+            });
 
-						tasks--;
-						if (!tasks) {
-							currentUserListener.triggerListener(true);
-						}
-					});
+            tasks--;
+            if (!tasks) {
+              currentUserListener.triggerListener(true);
+            }
+          });
 
-					// Retrieve custom words
-					customWordsPromise = retrieveCustomWords(
-						currentUser.auth.uid
-					);
-					customWordsPromise.then(function (result) {
-						if (result.success) {
-							// Custom words successfully retrieved
+          // Retrieve custom words
+          customWordsPromise = retrieveCustomWords(currentUser.auth.uid);
+          customWordsPromise.then(function (result) {
+            if (result.success) {
+              // Custom words successfully retrieved
 
-							currentUser.words = customWords;
-							result.return.forEach(function (gradeSnapshot) {
-								var grade = parseInt(gradeSnapshot.key);
-								gradeSnapshot.forEach(function (wordSnapshot) {
-									var newWord = Object.assign({}, word);
-									newWord.word = wordSnapshot.val().word;
-									newWord.hint = wordSnapshot.val().hint;
-									newWord.uid = wordSnapshot.key;
+              currentUser.words = customWords;
+              result.return.forEach(function (gradeSnapshot) {
+                var grade = parseInt(gradeSnapshot.key);
+                gradeSnapshot.forEach(function (wordSnapshot) {
+                  var newWord = Object.assign({}, word);
+                  newWord.word = wordSnapshot.val().word;
+                  newWord.hint = wordSnapshot.val().hint;
+                  newWord.uid = wordSnapshot.key;
 
-									switch (grade) {
-										case FIRST_GRADE:
-											currentUser.words.FIRST_GRADE.push(
-												newWord
-											);
-											break;
-										case SECOND_GRADE:
-											currentUser.words.SECOND_GRADE.push(
-												newWord
-											);
-											break;
-										case THIRD_GRADE:
-											currentUser.words.THIRD_GRADE.push(
-												newWord
-											);
-											break;
-										case FOURTH_GRADE:
-											currentUser.words.FOURTH_GRADE.push(
-												newWord
-											);
-											break;
-										case FIFTH_GRADE:
-											currentUser.words.FIFTH_GRADE.push(
-												newWord
-											);
-											break;
-									}
-								});
-							});
-						} else {
-							console.log("Error retrieving custom words.");
-						}
+                  switch (grade) {
+                    case FIRST_GRADE:
+                      currentUser.words.FIRST_GRADE.push(newWord);
+                      break;
+                    case SECOND_GRADE:
+                      currentUser.words.SECOND_GRADE.push(newWord);
+                      break;
+                    case THIRD_GRADE:
+                      currentUser.words.THIRD_GRADE.push(newWord);
+                      break;
+                    case FOURTH_GRADE:
+                      currentUser.words.FOURTH_GRADE.push(newWord);
+                      break;
+                    case FIFTH_GRADE:
+                      currentUser.words.FIFTH_GRADE.push(newWord);
+                      break;
+                  }
+                });
+              });
+            } else {
+              console.log("Error retrieving custom words.");
+            }
 
-						tasks--;
-						if (!tasks) {
-							currentUserListener.triggerListener(true);
-						}
-					});
-				} else if (
-					currentUserSnapshot.val().accountType ==
-					ACCOUNT_TYPE_STUDENT
-				) {
-					// Student account
-					currentUser = Object.assign({}, student);
-					currentUser.auth = authUser;
-					currentUserListener.triggerListener(true);
-				}
-			} else {
-				// Error retrieving snapshot
-				console.log("Error retriving user snapshot.");
-			}
-		});
-	} else {
-		// User signed out
-		currentUser = undefined;
-		currentUserListener.triggerListener(false);
-	}
+            tasks--;
+            if (!tasks) {
+              currentUserListener.triggerListener(true);
+            }
+          });
+        } else if (
+          currentUserSnapshot.val().accountType == ACCOUNT_TYPE_STUDENT
+        ) {
+          // Student account
+          currentUser = Object.assign({}, student);
+          currentUser.auth = authUser;
+          currentUserListener.triggerListener(true);
+        }
+      } else {
+        // Error retrieving snapshot
+        console.log("Error retriving user snapshot.");
+      }
+    });
+  } else {
+    // User signed out
+    currentUser = undefined;
+    currentUserListener.triggerListener(false);
+  }
 });
 
 /**
@@ -208,14 +192,14 @@ auth.onAuthStateChanged(function (authUser) {
  * is returned.
  */
 async function signInWithEmailAndPassword(email, password) {
-	return auth
-		.signInWithEmailAndPassword(email, password)
-		.then(function (result) {
-			return result;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return auth
+    .signInWithEmailAndPassword(email, password)
+    .then(function (result) {
+      return result;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 /**
@@ -228,14 +212,14 @@ async function signInWithEmailAndPassword(email, password) {
  * is returned else the error is returned.
  */
 async function signOutFirebaseUser() {
-	return auth
-		.signOut()
-		.then(function () {
-			return true;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return auth
+    .signOut()
+    .then(function () {
+      return true;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 /**
@@ -251,14 +235,14 @@ async function signOutFirebaseUser() {
  * the error is returned.
  */
 async function createUserWithEmailAndPassword(email, password) {
-	return auth
-		.createUserWithEmailAndPassword(email, password)
-		.then(function (result) {
-			return result;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(function (result) {
+      return result;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 /**
@@ -273,16 +257,16 @@ async function createUserWithEmailAndPassword(email, password) {
  * else an error is returned.
  */
 async function updateUserDisplayName(name) {
-	return currentUser.auth
-		.updateProfile({
-			displayName: name,
-		})
-		.then(function () {
-			return true;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return currentUser.auth
+    .updateProfile({
+      displayName: name,
+    })
+    .then(function () {
+      return true;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 /**
@@ -300,14 +284,14 @@ async function updateUserDisplayName(name) {
  * to user.
  */
 async function sendPasswordResetEmail(email) {
-	return auth
-		.sendPasswordResetEmail(email)
-		.then(function () {
-			return "Reset link has been emailed to " + email;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return auth
+    .sendPasswordResetEmail(email)
+    .then(function () {
+      return "Reset link has been emailed to " + email;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 //-------------- FIREBASE REALTIME FUNCTIONS --------------//
@@ -323,20 +307,20 @@ async function sendPasswordResetEmail(email) {
  * or an error
  */
 async function retrieveUserSnapshot(uid) {
-	var result = asyncReturn;
-	return database
-		.ref("users/" + uid)
-		.once("value")
-		.then(function (snapshot) {
-			result.success = true;
-			result.return = snapshot;
-			return result;
-		})
-		.catch(function (error) {
-			result.success = false;
-			result.return = error;
-			return result;
-		});
+  var result = Object.assign({}, asyncReturn);
+  return database
+    .ref("users/" + uid)
+    .once("value")
+    .then(function (snapshot) {
+      result.success = true;
+      result.return = snapshot;
+      return result;
+    })
+    .catch(function (error) {
+      result.success = false;
+      result.return = error;
+      return result;
+    });
 }
 
 /**
@@ -353,20 +337,20 @@ async function retrieveUserSnapshot(uid) {
  * @todo catch to prevent student from calling function
  */
 async function retrieveCustomWords(uid) {
-	var result = asyncReturn;
-	return database
-		.ref("users/" + uid + "/words/")
-		.once("value")
-		.then(function (snapshot) {
-			result.success = true;
-			result.return = snapshot;
-			return result;
-		})
-		.catch(function (error) {
-			result.success = false;
-			result.return = error;
-			return result;
-		});
+  var result = Object.assign({}, asyncReturn);
+  return database
+    .ref("users/" + uid + "/words/")
+    .once("value")
+    .then(function (snapshot) {
+      result.success = true;
+      result.return = snapshot;
+      return result;
+    })
+    .catch(function (error) {
+      result.success = false;
+      result.return = error;
+      return result;
+    });
 }
 
 /**
@@ -383,17 +367,17 @@ async function retrieveCustomWords(uid) {
  * else return the error.
  */
 async function pushBlankUserToDatabase(uid, status) {
-	return database
-		.ref("users/" + uid)
-		.set({
-			accountType: status,
-		})
-		.then(function () {
-			return true;
-		})
-		.catch(function (error) {
-			return error;
-		});
+  return database
+    .ref("users/" + uid)
+    .set({
+      accountType: status,
+    })
+    .then(function () {
+      return true;
+    })
+    .catch(function (error) {
+      return error;
+    });
 }
 
 /**
@@ -409,56 +393,56 @@ async function pushBlankUserToDatabase(uid, status) {
  * push. On success the uid of new word is returned else error is returned.
  */
 async function addWordToDatabase(newWord, newHint, grade) {
-	var result = asyncReturn;
+  var result = Object.assign({}, asyncReturn);
 
-	var key = firebase
-		.database()
-		.ref("users/" + currentUser.auth.uid + "/words/" + grade)
-		.push().key;
-	return database
-		.ref("users/" + currentUser.auth.uid + "/words/" + grade + "/" + key)
-		.set({
-			word: newWord,
-			hint: newHint,
-		})
-		.then(function () {
-			var word = Object.assign({}, word);
-			console.log(word)
-			word.word = newWord;
-			console.log(word)
-			word.hint = newHint;
-			console.log(word)
-			word.uid = key;
-			console.log(word)
-			switch (parseInt(grade)) {
-				case FIRST_GRADE:
-					currentUser.words.FIRST_GRADE.push(word);
-					break;
-				case SECOND_GRADE:
-					currentUser.words.SECOND_GRADE.push(word);
-					break;
-				case THIRD_GRADE:
-					currentUser.words.THIRD_GRADE.push(word);
-					break;
-				case FOURTH_GRADE:
-					currentUser.words.FOURTH_GRADE.push(word);
-					break;
-				case FIFTH_GRADE:
-					currentUser.words.FIFTH_GRADE.push(word);
-					break;
-			}
+  var key = firebase
+    .database()
+    .ref("users/" + currentUser.auth.uid + "/words/" + grade)
+    .push().key;
+  return database
+    .ref("users/" + currentUser.auth.uid + "/words/" + grade + "/" + key)
+    .set({
+      word: newWord,
+      hint: newHint,
+    })
+    .then(function () {
+      var word = Object.assign({}, word);
+      console.log(word);
+      word.word = newWord;
+      console.log(word);
+      word.hint = newHint;
+      console.log(word);
+      word.uid = key;
+      console.log(word);
+      switch (parseInt(grade)) {
+        case FIRST_GRADE:
+          currentUser.words.FIRST_GRADE.push(word);
+          break;
+        case SECOND_GRADE:
+          currentUser.words.SECOND_GRADE.push(word);
+          break;
+        case THIRD_GRADE:
+          currentUser.words.THIRD_GRADE.push(word);
+          break;
+        case FOURTH_GRADE:
+          currentUser.words.FOURTH_GRADE.push(word);
+          break;
+        case FIFTH_GRADE:
+          currentUser.words.FIFTH_GRADE.push(word);
+          break;
+      }
 
-			console.log(currentUser);
+      console.log(currentUser);
 
-			result.success = true;
-			result.return = key;
-			return result;
-		})
-		.catch(function (error) {
-			result.success = false;
-			result.return = error;
-			return result;
-		});
+      result.success = true;
+      result.return = key;
+      return result;
+    })
+    .catch(function (error) {
+      result.success = false;
+      result.return = error;
+      return result;
+    });
 }
 
 /**
@@ -475,25 +459,23 @@ async function addWordToDatabase(newWord, newHint, grade) {
  * @todo Make sure only a teacher can access this function
  */
 async function updateWord(word, grade, newWord, newHint) {
-	var result = asyncReturn;
+  var result = Object.assign({}, asyncReturn);
 
-	return database
-		.ref(
-			"users/" + currentUser.auth.uid + "/words/" + grade + "/" + word.uid
-		)
-		.set({
-			word: newWord,
-			hint: newHint,
-		})
-		.then(function () {
-			result.success = true;
-			return result;
-		})
-		.catch(function (error) {
-			result.success = false;
-			result.return = error;
-			return result;
-		});
+  return database
+    .ref("users/" + currentUser.auth.uid + "/words/" + grade + "/" + word.uid)
+    .set({
+      word: newWord,
+      hint: newHint,
+    })
+    .then(function () {
+      result.success = true;
+      return result;
+    })
+    .catch(function (error) {
+      result.success = false;
+      result.return = error;
+      return result;
+    });
 }
 
 /**
@@ -511,26 +493,26 @@ async function updateWord(word, grade, newWord, newHint) {
  * error is returned.
  */
 async function addStudentToTeacher(uid) {
-	var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT);
+  var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT);
 
-	return promise.then(function (result) {
-		if (result == true) {
-			return database
-				.ref("users/" + currentUser.auth.uid + "/students/")
-				.push({
-					uid,
-				})
-				.then(function () {
-					return true;
-				})
-				.catch(function (error) {
-					return error;
-				});
-		} else {
-			// TODO: Should the error be returned to the user?
-			alert(error);
-		}
-	});
+  return promise.then(function (result) {
+    if (result == true) {
+      return database
+        .ref("users/" + currentUser.auth.uid + "/students/")
+        .push({
+          uid,
+        })
+        .then(function () {
+          return true;
+        })
+        .catch(function (error) {
+          return error;
+        });
+    } else {
+      // TODO: Should the error be returned to the user?
+      alert(error);
+    }
+  });
 }
 
 /**
@@ -545,29 +527,29 @@ async function addStudentToTeacher(uid) {
  * is returned
  */
 async function retrieveGameWords(grade) {
-	var result = Object.assign({}, asyncReturn);
-	var words = [];
-	return database
-		.ref("words/" + grade)
-		.once("value")
-		.then(function (snapshot) {
-			snapshot.forEach(function (wordSnapshot) {
-				var newWord = Object.assign({}, word);
-				newWord.word = wordSnapshot.val().word;
-				newWord.hint = wordSnapshot.val().hint;
-				words.push(newWord);
-			});
+  var result = Object.assign({}, asyncReturn);
+  var words = [];
+  return database
+    .ref("words/" + grade)
+    .once("value")
+    .then(function (snapshot) {
+      snapshot.forEach(function (wordSnapshot) {
+        var newWord = Object.assign({}, word);
+        newWord.word = wordSnapshot.val().word;
+        newWord.hint = wordSnapshot.val().hint;
+        words.push(newWord);
+      });
 
-			result.success = true;
-			result.return = words;
-			return result;
-		})
-		.catch(function (error) {
-			result.success = false;
-			result.return = error;
+      result.success = true;
+      result.return = words;
+      return result;
+    })
+    .catch(function (error) {
+      result.success = false;
+      result.return = error;
 
-			return result;
-		});
+      return result;
+    });
 }
 
 /**
@@ -587,35 +569,58 @@ async function retrieveGameWords(grade) {
  * @todo possibly return the error instead of alerting the user.
  */
 async function createStudentAccount(studentName, studentPassword) {
-	createStudentAccountFunction({
-		name: studentName,
-		password: studentPassword,
-		teacherName: currentUser.auth.displayName,
-	})
-		.then(function (result) {
-			if (result.data.uid != null) {
-				promise = addStudentToTeacher(result.data.uid);
+  createStudentAccountFunction({
+    name: studentName,
+    password: studentPassword,
+    teacherName: currentUser.auth.displayName,
+  })
+    .then(function (result) {
+      if (result.data.uid != null) {
+        promise = addStudentToTeacher(result.data.uid);
 
-				promise
-					.then(function (result) {
-						if (result == true) {
-							alert("Student successfully created");
-						} else {
-							alert(result);
-						}
-					})
-					.catch(function (error) {
-						alert(error);
-					});
-			} else if (result.data.error != null) {
-				alert(result.data.error.errorInfo.message);
-			} else {
-				alert("An unknown error occured");
-			}
-		})
-		.catch(function (error) {
-			alert(error);
-		});
+        promise
+          .then(function (result) {
+            if (result == true) {
+              alert("Student successfully created");
+            } else {
+              alert(result);
+            }
+          })
+          .catch(function (error) {
+            alert(error);
+          });
+      } else if (result.data.error != null) {
+        alert(result.data.error.errorInfo.message);
+      } else {
+        alert("An unknown error occured");
+      }
+    })
+    .catch(function (error) {
+      alert(error);
+    });
+}
+
+async function resetStudentPassword(studentUid, newPassword) {
+  var result = Object.assign({}, asyncReturn);
+
+  var promise = resetStudentPasswordFunction({
+    uid: studentUid,
+    password: newPassword,
+  });
+
+  return promise
+    .then(function (promise_result) {
+      console.log(promise_result);
+      result.success = promise_result[0];
+      result.return = promise_result[1];
+      return result;
+    })
+    .catch(function (error) {
+      console.log(error);
+      result.success = false;
+      result.return = error;
+      return result;
+    });
 }
 
 /**
@@ -634,11 +639,11 @@ async function createStudentAccount(studentName, studentPassword) {
  * student names, else this index is filled with an error.
  */
 async function retrieveStudentAuth(uid) {
-	var promise = retrieveStudentAuthFunction({
-		uid: uid,
-	});
+  var promise = retrieveStudentAuthFunction({
+    uid: uid,
+  });
 
-	return promise.then(function (result) {
-		return result;
-	});
+  return promise.then(function (result) {
+    return result;
+  });
 }

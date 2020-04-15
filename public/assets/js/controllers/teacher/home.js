@@ -23,7 +23,7 @@ let wordsList = document.getElementById("custom-words");
 var studentName = document.getElementById("student-name");
 var studentPassword = document.getElementById("student-password");
 var studentConfirmPassword = document.getElementById(
-	"student-confirm-password"
+  "student-confirm-password"
 );
 
 /**
@@ -31,32 +31,32 @@ var studentConfirmPassword = document.getElementById(
  * user is signed in we update the ui of home page.
  */
 currentUserListener.registerListener(function (val) {
-	if (val) {
-		// User is signed in
-		if (currentUserIsTeacher()) {
-			// Update display name
-			var displayName = currentUser.auth.displayName;
-			if (displayName) {
-				username.value = displayName;
-				titleHeader.innerHTML = "Welcome " + displayName;
-			} else {
-				username.value = null;
-			}
+  if (val) {
+    // User is signed in
+    if (currentUserIsTeacher()) {
+      // Update display name
+      var displayName = currentUser.auth.displayName;
+      if (displayName) {
+        username.value = displayName;
+        titleHeader.innerHTML = "Welcome " + displayName;
+      } else {
+        username.value = null;
+      }
 
-			// Update students
-			updateStudentsUI();
+      // Update students
+      updateStudentsUI();
 
-			//Update custom words
-			updateCustomWordsUI();
-		} else if (currentUserIsStudent) {
-			// window.location.replace("student/home.html");
-		} else {
-			console.log("Unknown user account type.");
-		}
-	} else {
-		// User is not signed in
-		window.location.replace("/");
-	}
+      //Update custom words
+      updateCustomWordsUI();
+    } else if (currentUserIsStudent) {
+      // window.location.replace("student/home.html");
+    } else {
+      console.log("Unknown user account type.");
+    }
+  } else {
+    // User is not signed in
+    window.location.replace("/");
+  }
 });
 
 /**
@@ -66,16 +66,16 @@ currentUserListener.registerListener(function (val) {
  * @function updateName
  */
 function updateName() {
-	promise = updateUserDisplayName(username.value);
+  promise = updateUserDisplayName(username.value);
 
-	promise.then(function (result) {
-		if (result == true) {
-			titleHeader.innerHTML = "Welcome " + username.value;
-			alert("Name successfully updated");
-		} else {
-			alert(result);
-		}
-	});
+  promise.then(function (result) {
+    if (result == true) {
+      titleHeader.innerHTML = "Welcome " + username.value;
+      alert("Name successfully updated");
+    } else {
+      alert(result);
+    }
+  });
 }
 
 /**
@@ -84,7 +84,7 @@ function updateName() {
  * @function updateStudentsUI
  */
 function updateStudentsUI() {
-	studentsList.innerHTML = `
+  studentsList.innerHTML = `
 		<input
 			id=""
 			type="button"
@@ -92,17 +92,21 @@ function updateStudentsUI() {
 			onclick="displayModal('createStudent')"
 		/>
 	`;
-	currentUser.students.forEach(function (student) {
-		studentsList.innerHTML +=
-			`
+  currentUser.students.forEach(function (student) {
+    studentsList.innerHTML +=
+      `
 			<div class="list-content">
 				<h2>` +
-			student.auth.displayName +
-			`</h2>
-				<button onclick="displayModal('editStudent')">Edit</button>
+      student.auth.displayName +
+      `</h2>
+				<button id="button` +
+      student.auth.uid +
+      `" onclick="displayEditStudentModal('` +
+      student.auth.uid +
+      `')">Edit</button>
 			</div>
-		`;
-	});
+    `;
+  });
 }
 
 /**
@@ -111,7 +115,7 @@ function updateStudentsUI() {
  * @function updateStudentsUI
  */
 function updateCustomWordsUI() {
-	wordsList.innerHTML = `
+  wordsList.innerHTML = `
 	<input
 	  id=""
 	  type="button"
@@ -119,90 +123,90 @@ function updateCustomWordsUI() {
 	  onclick="displayModal('addWord')"
 	/>`;
 
-	wordsList.innerHTML += '<h3 id="1">First Grade</h3>';
-	currentUser.words.FIRST_GRADE.forEach(function (word) {
-		wordsList.innerHTML +=
-			`
+  wordsList.innerHTML += '<h3 id="1">First Grade</h3>';
+  currentUser.words.FIRST_GRADE.forEach(function (word) {
+    wordsList.innerHTML +=
+      `
 			  <div class="list-content">
 				  <h2 id="word` +
-			word.uid +
-			`">` +
-			word.word +
-			`</h2>
+      word.uid +
+      `">` +
+      word.word +
+      `</h2>
 				  <button onclick="displayEditWordModal(1, '` +
-			word.uid +
-			`')">Edit</button>
+      word.uid +
+      `')">Edit</button>
 			  </div>
 		  `;
-	});
+  });
 
-	wordsList.innerHTML += '<h3 id="2">Second Grade</h3>';
-	currentUser.words.SECOND_GRADE.forEach(function (word) {
-		wordsList.innerHTML +=
-			`
+  wordsList.innerHTML += '<h3 id="2">Second Grade</h3>';
+  currentUser.words.SECOND_GRADE.forEach(function (word) {
+    wordsList.innerHTML +=
+      `
       <div class="list-content">
         <h2 id="word` +
-			word.uid +
-			`">` +
-			word.word +
-			`</h2>
+      word.uid +
+      `">` +
+      word.word +
+      `</h2>
         <button onclick="displayEditWordModal(2, '` +
-			word.uid +
-			`')">Edit</button>
+      word.uid +
+      `')">Edit</button>
       </div>
     `;
-	});
+  });
 
-	wordsList.innerHTML += '<h3 id="3">Third Grade</h3>';
-	currentUser.words.THIRD_GRADE.forEach(function (word) {
-		wordsList.innerHTML +=
-			`
+  wordsList.innerHTML += '<h3 id="3">Third Grade</h3>';
+  currentUser.words.THIRD_GRADE.forEach(function (word) {
+    wordsList.innerHTML +=
+      `
       <div class="list-content">
         <h2 id="word` +
-			word.uid +
-			`">` +
-			word.word +
-			`</h2>
+      word.uid +
+      `">` +
+      word.word +
+      `</h2>
         <button onclick="displayEditWordModal(3, '` +
-			word.uid +
-			`')">Edit</button>
+      word.uid +
+      `')">Edit</button>
       </div>
     `;
-	});
+  });
 
-	wordsList.innerHTML += '<h3 id="4">Fourth Grade</h3>';
-	currentUser.words.FOURTH_GRADE.forEach(function (word) {
-		wordsList.innerHTML +=
-			`
+  wordsList.innerHTML += '<h3 id="4">Fourth Grade</h3>';
+  currentUser.words.FOURTH_GRADE.forEach(function (word) {
+    wordsList.innerHTML +=
+      `
       <div class="list-content">
         <h2 id="word` +
-			word.uid +
-			`">` +
-			word.word +
-			`</h2>
+      word.uid +
+      `">` +
+      word.word +
+      `</h2>
         <button onclick="displayEditWordModal(4, '` +
-			word.uid +
-			`')">Edit</button>
+      word.uid +
+      `')">Edit</button>
       </div>
     `;
-	});
+  });
 
-	wordsList.innerHTML += '<h3 id="5">Fifth Grade</h3>';
-	currentUser.words.FIFTH_GRADE.forEach(function (word) {
-		wordsList.innerHTML +=
-			`
+  wordsList.innerHTML += '<h3 id="5">Fifth Grade</h3>';
+  currentUser.words.FIFTH_GRADE.forEach(function (word) {
+    wordsList.innerHTML +=
+      `
       <div class="list-content">
         <h2 id="word` +
-			word.uid +
-			`">` +
-			word.word +
-			`</h2>
+      word.uid +
+      `">` +
+      word.word +
+      `</h2>
         <button onclick="displayEditWordModal(5, '` +
-			word.uid +
-			`')">Edit</button>
+      word.uid +
+      `')">Edit</button>
       </div>
     `;
-	});
+  });
 }
 
 /**
@@ -214,17 +218,17 @@ function updateCustomWordsUI() {
  * @function updatePassword
  */
 function updatePassword() {
-	var email = currentUser.auth.email;
+  var email = currentUser.auth.email;
 
-	if (email != null) {
-		var promise = sendPasswordResetEmail(email);
+  if (email != null) {
+    var promise = sendPasswordResetEmail(email);
 
-		promise.then(function (result) {
-			alert("Password reset email sent to: " + email);
-		});
-	} else {
-		alert("No email found");
-	}
+    promise.then(function (result) {
+      alert("Password reset email sent to: " + email);
+    });
+  } else {
+    alert("No email found");
+  }
 }
 
 /**
@@ -235,15 +239,15 @@ function updatePassword() {
  * @function signOut
  */
 function signOut() {
-	var promise = signOutFirebaseUser();
+  var promise = signOutFirebaseUser();
 
-	promise.then(function (result) {
-		if ((result = true)) {
-			window.location.replace("/");
-		} else {
-			alert(result);
-		}
-	});
+  promise.then(function (result) {
+    if ((result = true)) {
+      window.location.replace("/");
+    } else {
+      alert(result);
+    }
+  });
 }
 
 /**
@@ -257,15 +261,15 @@ function signOut() {
  * @todo update ui with new student
  */
 function addStudentAccount() {
-	var name = studentName.value;
-	var password = studentPassword.value;
-	var confirmPassword = studentConfirmPassword.value;
+  var name = studentName.value;
+  var password = studentPassword.value;
+  var confirmPassword = studentConfirmPassword.value;
 
-	if (password == confirmPassword) {
-		createStudentAccount(name, password);
-	} else {
-		alert("Passwords do not match");
-	}
+  if (password == confirmPassword) {
+    createStudentAccount(name, password);
+  } else {
+    alert("Passwords do not match");
+  }
 }
 
 /**
@@ -279,38 +283,96 @@ function addStudentAccount() {
  * @todo update ui with new word
  */
 function addWord() {
-	var newWord = wordInputField.value;
-	var newHint = hintInputField.value;
-	var grade = sort.options[sort.selectedIndex].value;
+  var newWord = wordInputField.value;
+  var newHint = hintInputField.value;
+  var grade = sort.options[sort.selectedIndex].value;
 
-	var promise = addWordToDatabase(newWord, newHint, grade);
+  var promise = addWordToDatabase(newWord, newHint, grade);
 
-	promise.then(function (result) {
-		if (result.success == true) {
-			var gradeSection = document.getElementById(grade);
-			insertAfterEndAdjacentHTML(
+  promise.then(function (result) {
+    if (result.success == true) {
+      var gradeSection = document.getElementById(grade);
+      insertAfterEndAdjacentHTML(
         gradeSection,
         `
         <div class="list-content">
           <h2 id="word` +
-        result.return +
-        `">` +
-        newWord +
-        `</h2>
-          <button onclick="displayEditWordModal(`+ grade + `, '` +
           result.return +
-        `')">Edit</button>
+          `">` +
+          newWord +
+          `</h2>
+          <button onclick="displayEditWordModal(` +
+          grade +
+          `, '` +
+          result.return +
+          `')">Edit</button>
         </div>
       `
-			);
+      );
 
       wordInputField.value = "";
-        hintInputField.value = "";
-			alert("Word successfully added");
-		} else {
-			alert(result.return);
-		}
-	});
+      hintInputField.value = "";
+      alert("Word successfully added");
+    } else {
+      alert(result.return);
+    }
+  });
+}
+
+function displayEditStudentModal(uid) {
+  var modal = document.getElementById("editStudent");
+  var content = document.getElementById("editStudentContent");
+
+  currentUser.students.forEach(function (student) {
+    if (student.auth.uid == uid) {
+      content.innerHTML =
+        `
+        <h1>` +
+        student.auth.displayName +
+        `</h1>
+        <div class="form">
+          <p>Update Password</p>
+          <input id="studentPassword" type="password" name="new-password" id="new-password" placeholder="New Password" />
+          <input id="studentConfirmPassword" type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" />
+
+          <input id="update` +
+        student.auth.uid +
+        `" type="submit" value="Update Password" class="special"" />
+        </div>
+      `;
+
+      var updatePasswordButton = document.getElementById(
+        "update" + student.auth.uid
+      );
+      updatePasswordButton.onclick = function () {
+        var passwordField = document.getElementById("studentPassword");
+        var confirmPasswordField = document.getElementById(
+          "studentConfirmPassword"
+        );
+        var password = passwordField.value;
+        var confirmPassword = confirmPasswordField.value;
+
+        if (password == confirmPassword) {
+
+          var promise = resetStudentPassword(student.auth.uid, password);
+
+          promise
+            .then(function (result) {
+              console.log(result.return);
+              alert(result.return);
+            })
+            .catch(function (error) {
+              console.log(error);
+              alert(error);
+            });
+        } else {
+          alert("Passwords do not match");
+        }
+      };
+    }
+  });
+
+  modal.style.display = "block";
 }
 
 /**
@@ -323,78 +385,71 @@ function addWord() {
  * @todo prevent one model from opening if another is open
  */
 function displayEditWordModal(grade, uid) {
-	var modal = document.getElementById("editWord");
-	var wordInput = document.getElementById("update-word");
-	var hintInput = document.getElementById("update-hint");
-	var updateButton = document.getElementById("update-word-button");
+  var modal = document.getElementById("editWord");
+  var wordInput = document.getElementById("update-word");
+  var hintInput = document.getElementById("update-hint");
+  var updateButton = document.getElementById("update-word-button");
 
-	switch (grade) {
-		case FIRST_GRADE:
-			currentUser.words.FIRST_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-					updateButton.onclick = function () {
-						var promise = updateWord(
-							word,
-							1,
-							wordInput.value,
-							hintInput.value
-						);
+  switch (grade) {
+    case FIRST_GRADE:
+      currentUser.words.FIRST_GRADE.forEach(function (word) {
+        if (word.uid == uid) {
+          wordInput.value = word.word;
+          hintInput.value = word.hint;
+          updateButton.onclick = function () {
+            var promise = updateWord(word, 1, wordInput.value, hintInput.value);
 
-						promise.then(function (result) {
-							if (result.success == true) {
-								var wordLabel = document.getElementById(
-									"word" + word.uid
-								);
-								wordLabel.innerHTML = wordInput.value;
+            promise.then(function (result) {
+              if (result.success == true) {
+                var wordLabel = document.getElementById("word" + word.uid);
+                wordLabel.innerHTML = wordInput.value;
 
-								word.word = wordInput.value;
-								word.hint = hintInput.value;
-								alert("Word successfully updated.");
-							} else {
-								alert(result.return);
-							}
-						});
-					};
-				}
-			});
-			break;
-		case SECOND_GRADE:
-			currentUser.words.SECOND_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-				}
-			});
-			break;
-		case THIRD_GRADE:
-			currentUser.words.THIRD_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-				}
-			});
-			break;
-		case FOURTH_GRADE:
-			currentUser.words.FOURTH_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-				}
-			});
-			break;
-		case FIFTH_GRADE:
-			currentUser.words.FIFTH_GRADE.forEach(function (word) {
-				if (word.uid == uid) {
-					wordInput.value = word.word;
-					hintInput.value = word.hint;
-				}
-			});
-			break;
-	}
+                word.word = wordInput.value;
+                word.hint = hintInput.value;
+                alert("Word successfully updated.");
+              } else {
+                alert(result.return);
+              }
+            });
+          };
+        }
+      });
+      break;
+    case SECOND_GRADE:
+      currentUser.words.SECOND_GRADE.forEach(function (word) {
+        if (word.uid == uid) {
+          wordInput.value = word.word;
+          hintInput.value = word.hint;
+        }
+      });
+      break;
+    case THIRD_GRADE:
+      currentUser.words.THIRD_GRADE.forEach(function (word) {
+        if (word.uid == uid) {
+          wordInput.value = word.word;
+          hintInput.value = word.hint;
+        }
+      });
+      break;
+    case FOURTH_GRADE:
+      currentUser.words.FOURTH_GRADE.forEach(function (word) {
+        if (word.uid == uid) {
+          wordInput.value = word.word;
+          hintInput.value = word.hint;
+        }
+      });
+      break;
+    case FIFTH_GRADE:
+      currentUser.words.FIFTH_GRADE.forEach(function (word) {
+        if (word.uid == uid) {
+          wordInput.value = word.word;
+          hintInput.value = word.hint;
+        }
+      });
+      break;
+  }
 
-	modal.style.display = "block";
+  modal.style.display = "block";
 }
 
 /**
@@ -406,12 +461,12 @@ function displayEditWordModal(grade, uid) {
  * @todo prevent one model from opening if another is open
  */
 function displayModal(modalName, data) {
-	let modal = document.getElementById(modalName);
+  let modal = document.getElementById(modalName);
 
-	if (data != null) {
-		modal.dataset.uid = data;
-	}
-	modal.style.display = "block";
+  if (data != null) {
+    modal.dataset.uid = data;
+  }
+  modal.style.display = "block";
 }
 
 /**
@@ -421,8 +476,8 @@ function displayModal(modalName, data) {
  * @param {String} modalName Id of the modal being hidden
  */
 function closeModal(modalName) {
-	let modal = document.getElementById(modalName);
-	modal.style.display = "none";
+  let modal = document.getElementById(modalName);
+  modal.style.display = "none";
 }
 
 /**
@@ -433,5 +488,5 @@ function closeModal(modalName) {
  * @param {String} html
  */
 function insertAfterEndAdjacentHTML(element, html) {
-	element.insertAdjacentHTML("afterend", html);
+  element.insertAdjacentHTML("afterend", html);
 }
