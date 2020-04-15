@@ -7,7 +7,9 @@ const EARTH_DIAMETER =
 //URL data
 var url = window.location.search;
 var params = new URLSearchParams(url);
-var level = undefined;
+
+// If the student was noyt assigned a level the default is set to first grade
+var level = FIRST_GRADE;
 
 // DOM elements
 var earth = document.getElementById("earth");
@@ -46,8 +48,12 @@ function init() {
   if (currentUserIsTeacher()) {
     level = params.get("level");
   } else {
-    level = currentUser.grade;
+    if (currentUser.grade != null) {
+      level = currentUser.grade;
+    }
   }
+
+  console.log(level)
 
   // Set asteroid styling
   asteroid.style.width = ASTEROID_WIDTH + "px";
@@ -71,7 +77,13 @@ function init() {
 
 function play() {
   if (gameWords.length == 0) {
-    swal("Good job!", "You passed the level!", "success");
+
+    if(level == FIFTH_GRADE) {
+      swal("Congratulations", "You successfully completed all levels! You can keep practicing fifth grade word if you want.", "success");
+    } else {
+      swal("Good job!", "You passed the level!", "success");
+      updateStudentGrade(currentUser.auth.uid, ++level);
+    }
   } else if (lives == 0) {
     swal("You Lose!", "Please refresh and try again!", "error");
     isPlaying = false;

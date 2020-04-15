@@ -49,8 +49,8 @@ currentUserListener.registerListener(function (val) {
 
       //Update custom words
       updateCustomWordsUI();
-    } else if (currentUserIsStudent) {
-      // window.location.replace("student/home.html");
+    } else if (currentUserIsStudent()) {
+      window.location.replace("/student/home.html");
     } else {
       console.log("Unknown user account type.");
     }

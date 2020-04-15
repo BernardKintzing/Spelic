@@ -166,7 +166,7 @@ auth.onAuthStateChanged(function (authUser) {
           // Student account
           currentUser = Object.assign({}, student);
           currentUser.auth = authUser;
-          currentUser.grade = currentUserSnapshot.val().grade
+          currentUser.grade = currentUserSnapshot.val().grade;
           currentUserListener.triggerListener(true);
         }
       } else {
@@ -261,6 +261,20 @@ async function updateUserDisplayName(name) {
   return currentUser.auth
     .updateProfile({
       displayName: name,
+    })
+    .then(function () {
+      return true;
+    })
+    .catch(function (error) {
+      return error;
+    });
+}
+
+async function updateStudentGrade(uid, grade) {
+  return database
+    .ref("users/" + uid)
+    .update({
+      grade: grade,
     })
     .then(function () {
       return true;
@@ -497,7 +511,11 @@ async function updateWord(word, grade, newWord, newHint) {
  * error is returned.
  */
 async function addStudentToTeacher(uid, studentGrade) {
-  var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT, studentGrade);
+  var promise = pushBlankUserToDatabase(
+    uid,
+    ACCOUNT_TYPE_STUDENT,
+    studentGrade
+  );
 
   return promise.then(function (result) {
     if (result == true) {
@@ -573,7 +591,11 @@ async function retrieveGameWords(grade) {
  * add a student.
  * @todo possibly return the error instead of alerting the user.
  */
-async function createStudentAccount(studentName, studentPassword, studentGrade) {
+async function createStudentAccount(
+  studentName,
+  studentPassword,
+  studentGrade
+) {
   createStudentAccountFunction({
     name: studentName,
     password: studentPassword,
