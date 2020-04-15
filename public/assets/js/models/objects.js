@@ -23,7 +23,8 @@ var teacher = {
  */
 var student = {
     auth: undefined,
-    accountType: ACCOUNT_TYPE_STUDENT
+    accountType: ACCOUNT_TYPE_STUDENT,
+    grade: undefined
 }
 
 /**

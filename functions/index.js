@@ -81,6 +81,8 @@ exports.retrieveStudentAuthFunction = functions.https.onCall(
  * @returns {Promise} An array with the first index containing
  * the succes of the request. The second index holds the return 
  * message for the user.
+ * 
+ * @todo Unable to run function due to CORS restrictions
  */
 exports.resetStudentPasswordFunction = functions.https.onCall(
   (data, context) => {

@@ -2064,7 +2064,7 @@
 		display: block;
 		outline: 0;
 		padding: 0 1rem;
-		margin: 1em 0;
+		margin: 1em 0 !important;
 		text-decoration: none;
 		width: 100%;
 	}

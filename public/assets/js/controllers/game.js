@@ -26,14 +26,27 @@ var speed = 5;
 var currentPos = -ASTEROID_WIDTH;
 var motionInterval = undefined;
 
+/**
+ * @description listen to updates on the user status. If the
+ * user is signed in we update the ui of home page.
+ */
+currentUserListener.registerListener(function (val) {
+  if (val) {
+    init();
+  } else {
+    // User is not signed in
+    window.location.replace("/");
+  }
+});
+
 function init() {
   // Load background
   particlesJS.load("particles-js", "/assets/js/particles/particles.json");
 
-  if(currentUserIsTeacher) {
+  if (currentUserIsTeacher()) {
     level = params.get("level");
   } else {
-    // TODO: get students level
+    level = currentUser.grade;
   }
 
   // Set asteroid styling
@@ -44,7 +57,7 @@ function init() {
   // TODO: retrieve users progress, game words, and custom
   // words on completion of all promises start the game
   var promise = retrieveGameWords(level);
-  promise.then(function(result) {
+  promise.then(function (result) {
     if (result.success) {
       // Words successfully retrieved
       gameWords = result.return;
@@ -55,14 +68,12 @@ function init() {
     }
   });
 }
-init();
-
 
 function play() {
   if (gameWords.length == 0) {
     swal("Good job!", "You passed the level!", "success");
   } else if (lives == 0) {
-    swal ( "You Lose!" ,  "Please refresh and try again!" ,  "error" )
+    swal("You Lose!", "Please refresh and try again!", "error");
     isPlaying = false;
   } else {
     sendAsteroid();
@@ -76,7 +87,7 @@ function sendAsteroid() {
   asteroidWord.innerHTML = testWord.word;
   hint.innerHTML = testWord.hint;
 
-  motionInterval = setInterval(function() {
+  motionInterval = setInterval(function () {
     if (isPlaying) {
       currentPos += speed;
       asteroid.style.left = currentPos + "px";
@@ -98,8 +109,9 @@ function sendAsteroid() {
 function sleep(milliseconds) {
   var start = new Date().getTime();
   var timeup = null;
-  do {timeup = new Date().getTime(); }
-  while (timeup-start < milliseconds )
+  do {
+    timeup = new Date().getTime();
+  } while (timeup - start < milliseconds);
 }
 
 function submitVowel(vowel) {
@@ -120,8 +132,8 @@ function submitVowel(vowel) {
         play();
       }, 250);
     }, 750);
-    }
   }
+}
 
 function removeVowel(word) {
   var vowelIndices = [];

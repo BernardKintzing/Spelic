@@ -166,6 +166,7 @@ auth.onAuthStateChanged(function (authUser) {
           // Student account
           currentUser = Object.assign({}, student);
           currentUser.auth = authUser;
+          currentUser.grade = currentUserSnapshot.val().grade
           currentUserListener.triggerListener(true);
         }
       } else {
@@ -363,14 +364,16 @@ async function retrieveCustomWords(uid) {
  * by Firebase Authentication.
  * @param {String} status The account type of the user
  * either ACCOUNT_TYPE_TEACHER or ACCOUNT_TYPE_STUDENT.
+ * @param {String} grade The grade of the student
  * @returns {Promise} On success return the boolean true
  * else return the error.
  */
-async function pushBlankUserToDatabase(uid, status) {
+async function pushBlankUserToDatabase(uid, status, grade) {
   return database
     .ref("users/" + uid)
     .set({
       accountType: status,
+      grade: grade,
     })
     .then(function () {
       return true;
@@ -489,11 +492,12 @@ async function updateWord(word, grade, newWord, newHint) {
  * @async
  * @function addStudentToTeacher
  * @param {String} uid The unique identifier of the student account
+ * @param {String} studentGrade the grade of the student
  * @returns {Promise} On success true is returned, else the
  * error is returned.
  */
-async function addStudentToTeacher(uid) {
-  var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT);
+async function addStudentToTeacher(uid, studentGrade) {
+  var promise = pushBlankUserToDatabase(uid, ACCOUNT_TYPE_STUDENT, studentGrade);
 
   return promise.then(function (result) {
     if (result == true) {
@@ -563,12 +567,13 @@ async function retrieveGameWords(grade) {
  * @function createStudentAccount
  * @param {String} studentName
  * @param {String} studentPassword
+ * @param {String} studentGrade
  *
  * @todo add check to make sure that only a teacher can
  * add a student.
  * @todo possibly return the error instead of alerting the user.
  */
-async function createStudentAccount(studentName, studentPassword) {
+async function createStudentAccount(studentName, studentPassword, studentGrade) {
   createStudentAccountFunction({
     name: studentName,
     password: studentPassword,
@@ -576,7 +581,7 @@ async function createStudentAccount(studentName, studentPassword) {
   })
     .then(function (result) {
       if (result.data.uid != null) {
-        promise = addStudentToTeacher(result.data.uid);
+        promise = addStudentToTeacher(result.data.uid, studentGrade);
 
         promise
           .then(function (result) {

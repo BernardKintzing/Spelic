@@ -22,6 +22,7 @@ let wordsList = document.getElementById("custom-words");
 
 var studentName = document.getElementById("student-name");
 var studentPassword = document.getElementById("student-password");
+var studentGrade = document.getElementById("student-grade");
 var studentConfirmPassword = document.getElementById(
   "student-confirm-password"
 );
@@ -264,9 +265,12 @@ function addStudentAccount() {
   var name = studentName.value;
   var password = studentPassword.value;
   var confirmPassword = studentConfirmPassword.value;
+  var grade = studentGrade.options[studentGrade.selectedIndex].value;
+
+  console.log(grade)
 
   if (password == confirmPassword) {
-    createStudentAccount(name, password);
+    createStudentAccount(name, password, grade);
   } else {
     alert("Passwords do not match");
   }
@@ -502,6 +506,10 @@ function insertAfterEndAdjacentHTML(element, html) {
   element.insertAdjacentHTML("afterend", html);
 }
 
+/**
+ * @description Redirect a teacher to game page with 
+ * a given level selected.
+ */
 function testGame() {
   var level_select = document.getElementById("game-level");
   var level = level_select.options[level_select.selectedIndex].value;
