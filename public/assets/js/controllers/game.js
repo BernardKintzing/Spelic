@@ -28,6 +28,11 @@ var speed = 5;
 var currentPos = -ASTEROID_WIDTH;
 var motionInterval = undefined;
 
+// Sounds
+var music;
+
+
+
 /**
  * @description listen to updates on the user status. If the
  * user is signed in we update the ui of home page.
@@ -81,6 +86,8 @@ function play() {
     if(level == FIFTH_GRADE) {
       swal("Congratulations", "You successfully completed all levels! You can keep practicing fifth grade word if you want.", "success");
     } else {
+      var win = new Audio("/assets/sound/win.wav")
+      win.play();
       swal("Good job!", "You passed the level!", "success");
       updateStudentGrade(currentUser.auth.uid, ++level);
     }
@@ -112,6 +119,8 @@ function sendAsteroid() {
         asteroid.style.left = -ASTEROID_WIDTH;
         currentPos = -ASTEROID_WIDTH;
         clearInterval(motionInterval);
+        var smash = new Audio("/assets/sound/earthSmash.wav");
+        smash.play();
         play();
       }
     }
@@ -128,19 +137,24 @@ function sleep(milliseconds) {
 
 function submitVowel(vowel) {
   // TODO: make both lowercase
-
   if (vowel == hiddenVowel) {
     clearInterval(motionInterval);
     asteroid.style.backgroundImage = "url('/assets/images/explosion.png')";
     asteroidWord.style.visibility = "hidden";
+    var explosion = new Audio("/assets/sound/explosion.wav");
+    explosion.play();
+
     setTimeout(() => {
       asteroid.style.visibility = "hidden";
       asteroid.style.left = -ASTEROID_WIDTH;
       currentPos = -ASTEROID_WIDTH;
+  
       setTimeout(() => {
         asteroid.style.backgroundImage = "url('/assets/images/asteroid.png')";
         asteroidWord.style.visibility = "visible";
         asteroid.style.visibility = "visible";
+        var music = new Audio("/assets/sound/Dreamcatcher.mp3")
+        music.play();
         play();
       }, 250);
     }, 750);
