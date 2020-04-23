@@ -22,7 +22,7 @@ var playToggle = document.getElementById("play-pause");
 var gameWords = [];
 var isPlaying = false;
 var lives = 3;
-var hiddenVowel = "";
+var hiddenLetter = "";
 var vowels = ["a", "e", "i", "o", "u"];
 var speed = 5;
 var currentPos = -ASTEROID_WIDTH;
@@ -57,8 +57,6 @@ function init() {
       level = currentUser.grade;
     }
   }
-
-  console.log(level)
 
   // Set asteroid styling
   asteroid.style.width = ASTEROID_WIDTH + "px";
@@ -135,9 +133,19 @@ function sleep(milliseconds) {
   } while (timeup - start < milliseconds);
 }
 
-function submitVowel(vowel) {
+document.onkeypress = function(e) {
+  e = e || window.event;
+  var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+  if (charCode) {
+      submitGuess(String.fromCharCode(charCode));
+  }
+};
+
+// document.onkeypress = function() {myFunction()};
+
+function submitGuess(guess) {
   // TODO: make both lowercase
-  if (vowel == hiddenVowel) {
+  if (guess == hiddenLetter) {
     clearInterval(motionInterval);
     asteroid.style.backgroundImage = "url('/assets/images/explosion.png')";
     asteroidWord.style.visibility = "hidden";
@@ -162,20 +170,10 @@ function submitVowel(vowel) {
 }
 
 function removeVowel(word) {
-  var vowelIndices = [];
 
-  for (i = 0; i < word.length; i++) {
-    if (vowels.includes(word[i])) {
-      vowelIndices.push(i);
-    }
-  }
+  var i = Math.floor(Math.random() * (word.length - 1));
 
-  var i = vowelIndices.splice(
-    Math.floor(Math.random() * vowelIndices.length),
-    1
-  )[0];
-
-  hiddenVowel = word[i];
+  hiddenLetter = word[i];
   word = word.substr(0, i) + "_" + word.substr(i + "_".length);
   return word;
 }
