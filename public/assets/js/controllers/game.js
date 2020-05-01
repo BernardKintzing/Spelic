@@ -8,7 +8,7 @@ const EARTH_DIAMETER =
 var url = window.location.search;
 var params = new URLSearchParams(url);
 
-// If the student was noyt assigned a level the default is set to first grade
+// If the student was not assigned a level the default is set to first grade
 var level = FIRST_GRADE;
 
 // DOM elements
